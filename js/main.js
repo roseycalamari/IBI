@@ -2251,17 +2251,29 @@ if (projectInfoBtn && projectDescriptionModal && closeProjectDescriptionBtn) {
     projectInfoBtn.addEventListener('click', () => {
         projectDescriptionModal.classList.add('active');
         document.body.style.overflow = 'hidden';
+        
+        // Ensure modal is visible
+        projectDescriptionModal.style.opacity = '1';
+        projectDescriptionModal.style.visibility = 'visible';
     });
 
     closeProjectDescriptionBtn.addEventListener('click', () => {
         projectDescriptionModal.classList.remove('active');
         document.body.style.overflow = '';
+        
+        // Explicitly set opacity and visibility to ensure the modal is hidden
+        projectDescriptionModal.style.opacity = '0';
+        projectDescriptionModal.style.visibility = 'hidden';
     });
 
     projectDescriptionModal.addEventListener('click', (e) => {
         if (e.target === projectDescriptionModal) {
             projectDescriptionModal.classList.remove('active');
             document.body.style.overflow = '';
+            
+            // Explicitly set opacity and visibility to ensure the modal is hidden
+            projectDescriptionModal.style.opacity = '0';
+            projectDescriptionModal.style.visibility = 'hidden';
         }
     });
 }

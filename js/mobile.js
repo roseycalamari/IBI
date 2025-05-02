@@ -1138,6 +1138,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (e.target === projectModal) {
                 projectModal.classList.remove('active');
                 document.body.classList.remove('no-scroll');
+                
+                // Explicitly set opacity and visibility to ensure the modal is hidden
+                projectModal.style.opacity = '0';
+                projectModal.style.visibility = 'hidden';
             }
         });
         
@@ -1146,6 +1150,10 @@ document.addEventListener('DOMContentLoaded', function() {
             e.stopPropagation(); // Prevent event propagation
             projectModal.classList.remove('active');
             document.body.classList.remove('no-scroll');
+            
+            // Explicitly set opacity and visibility to ensure the modal is hidden
+            projectModal.style.opacity = '0';
+            projectModal.style.visibility = 'hidden';
         });
         
         // Handle keyboard navigation
@@ -1155,6 +1163,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (e.key === 'Escape') {
                 projectModal.classList.remove('active');
                 document.body.classList.remove('no-scroll');
+                
+                // Explicitly set opacity and visibility to ensure the modal is hidden
+                projectModal.style.opacity = '0';
+                projectModal.style.visibility = 'hidden';
             }
         });
         

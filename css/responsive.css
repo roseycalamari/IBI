@@ -1,0 +1,115 @@
+/* Responsive CSS for Ingrid Bergman Interiors
+ * This file contains styles that adapt the layout based on screen size
+ */
+
+/* Base styles - applied to all devices */
+.mobile-header, 
+.mobile-menu-overlay,
+.vertical-slider-container,
+.mobile-footer {
+    display: none;
+}
+
+/* Medium screens (tablets, small laptops) */
+@media screen and (max-width: 1200px) {
+    /* Adjust main 3-panel layout to be more compact */
+    .portrait-container {
+        width: 25%;
+    }
+    
+    .section-left, 
+    .section-right {
+        width: 37.5%;
+    }
+    
+    /* Make content text smaller */
+    .section-title {
+        font-size: 2.5rem;
+    }
+    
+    .expand-btn, 
+    .about-btn {
+        font-size: 1rem;
+        padding: 8px 16px;
+    }
+}
+
+/* Small tablets and large phones */
+@media screen and (max-width: 992px) {
+    /* Hide desktop elements */
+    .main-content,
+    .header .logo-container .nav-hint {
+        display: none;
+    }
+    
+    /* Show mobile elements */
+    .mobile-header,
+    .mobile-footer,
+    .vertical-slider-container {
+        display: block;
+    }
+    
+    /* Show mobile slider */
+    .vertical-slider-container {
+        height: calc(100vh - 120px); /* Adjust for header and footer */
+        width: 100%;
+    }
+    
+    /* Adjust section content for better visibility on smaller screens */
+    .about-section .about-grid,
+    .service-section .service-cards-container {
+        flex-direction: column;
+    }
+    
+    .about-section .about-image,
+    .about-section .about-text {
+        width: 100%;
+    }
+}
+
+/* Mobile phones */
+@media screen and (max-width: 576px) {
+    /* Further optimize for phones */
+    .mobile-header .mobile-logo h1 {
+        font-size: 1.2rem;
+    }
+    
+    .mobile-section-content {
+        padding: 1rem;
+    }
+    
+    .vertical-slide-title {
+        font-size: 2rem;
+    }
+    
+    .vertical-slide-btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    /* Stack service cards */
+    .mobile-service-card {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+}
+
+/* Handle orientation changes */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    .mobile-header {
+        height: 40px;
+    }
+    
+    .vertical-slider-container {
+        height: calc(100vh - 80px);
+    }
+    
+    .mobile-footer {
+        height: 40px;
+    }
+    
+    /* Adjust vertical slides for landscape */
+    .vertical-slide-content {
+        padding: 1rem;
+    }
+} 

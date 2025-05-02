@@ -212,6 +212,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (projectDescriptionModal) {
             document.body.style.overflow = '';
             projectDescriptionModal.classList.remove('active');
+            
+            // Explicitly set opacity and visibility to ensure the modal is hidden
+            projectDescriptionModal.style.opacity = '0';
+            projectDescriptionModal.style.visibility = 'hidden';
         }
     }
     
