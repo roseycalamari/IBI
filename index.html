@@ -6,71 +6,6 @@
     <title>Ingrid Bergman Interiors</title>
     <meta name="description" content="Premium interior design solutions. Transform your space with bespoke, elegant design.">
     
-    <!-- Device detection script - must be first -->
-    <script src="js/device-fix.js"></script>
-    
-    <!-- IMMEDIATE FIX FOR DESKTOP -->
-    <script>
-        (function forceDesktopView() {
-            // Only apply real mobile detection to actual mobile devices
-            var isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
-            if (!isMobileDevice) {
-                // Force desktop view - insert before any other styles load
-                var styleEl = document.createElement('style');
-                styleEl.id = 'force-desktop-view';
-                styleEl.innerHTML = `
-                    .main-content, .header { 
-                        display: block !important; 
-                    }
-                    .mobile-header, .mobile-footer, .vertical-slider-container, .mobile-menu-overlay { 
-                        display: none !important; 
-                    }
-                    body { 
-                        overflow: visible !important; 
-                    }
-                `;
-                document.head.appendChild(styleEl);
-                document.documentElement.className = 'desktop-device';
-            }
-        })();
-    </script>
-    
-    <!-- Early mobile detection script -->
-    <script>
-        (function() {
-            // Detect mobile devices ONLY, not just based on screen size
-            var isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
-            // Small screen size alone is not enough to consider as mobile
-            var isSmallScreen = window.innerWidth <= 992;
-            
-            // Only apply mobile styles if it's a true mobile device
-            if (isMobileDevice) {
-                document.documentElement.classList.add('mobile-device');
-                
-                // Add style tag for immediate styling before CSS loads
-                var style = document.createElement('style');
-                style.textContent = `
-                    @media (max-width: 992px) {
-                        .mobile-header, .mobile-footer, .vertical-slider-container { display: block !important; }
-                        .main-content, .header { display: none !important; }
-                        body { overflow-x: hidden; }
-                        .vertical-slider-container { 
-                            position: fixed; top: 60px; left: 0; right: 0; 
-                            height: calc(100vh - 120px); z-index: 50;
-                        }
-                        .vertical-slide:first-child { opacity: 1 !important; }
-                    }
-                `;
-                document.head.appendChild(style);
-            } else {
-                // Ensure desktop shows correctly by adding this class
-                document.documentElement.classList.add('desktop-device');
-            }
-        })();
-    </script>
-    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="images/logo white i.png">
     <link rel="apple-touch-icon" href="images/logo white i.png">
@@ -237,14 +172,14 @@
 
     <!-- Mobile Footer -->
     <footer class="mobile-footer">
-        <div class="mobile-social-links">
-            <a href="https://www.linkedin.com/in/ingridbergman/" class="mobile-social-link" target="_blank" aria-label="LinkedIn">
+        <div class="mobile-footer-social">
+            <a href="https://www.linkedin.com/in/ingridbergman/" target="_blank" aria-label="LinkedIn">
                 <i class="fab fa-linkedin-in"></i>
             </a>
-            <a href="https://www.instagram.com/ingrid_bergman_collections/" class="mobile-social-link" target="_blank" aria-label="Instagram">
+            <a href="https://www.instagram.com/ingrid_bergman_collections/" target="_blank" aria-label="Instagram">
                 <i class="fab fa-instagram"></i>
             </a>
-            <a href="mailto:ingrid@ingridbergmaninteriors.com" class="mobile-social-link" aria-label="Email">
+            <a href="mailto:ingrid@ingridbergmaninteriors.com" aria-label="Email">
                 <i class="far fa-envelope"></i>
             </a>
         </div>
@@ -665,5 +600,47 @@
     <script src="js/page-transitions.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/responsive.js"></script>
+    <!-- Mobile Menu Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('mobileMenuToggle');
+            const menuOverlay = document.getElementById('mobileMenuOverlay');
+            const menuItems = document.querySelectorAll('.mobile-menu-item');
+            
+            if (menuToggle && menuOverlay) {
+                menuToggle.addEventListener('click', function() {
+                    menuOverlay.classList.toggle('active');
+                    document.body.classList.toggle('mobile-menu-open');
+                    
+                    // Toggle menu icon appearance
+                    const spans = menuToggle.querySelectorAll('span');
+                    spans.forEach(span => {
+                        span.classList.toggle('active');
+                    });
+                });
+                
+                // Close menu when clicking on a menu item
+                menuItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        menuOverlay.classList.remove('active');
+                        document.body.classList.remove('mobile-menu-open');
+                        
+                        // Reset menu icon
+                        const spans = menuToggle.querySelectorAll('span');
+                        spans.forEach(span => {
+                            span.classList.remove('active');
+                        });
+                        
+                        // Set active class on selected item
+                        menuItems.forEach(menuItem => {
+                            menuItem.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>

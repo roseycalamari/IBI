@@ -1,23 +1,24 @@
 /**
- * Device-specific fixes for Ingrid Bergman Interiors
- * This script ensures the right layout is shown based on the device type
+ * Responsive layout management for Ingrid Bergman Interiors
+ * This script ensures the right layout is shown based on screen size
  */
 
 // Execute immediately
 (function() {
-    // Simple check for mobile devices
-    var isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    
-    // Add necessary classes
-    if (isMobileDevice) {
-        document.documentElement.className = 'mobile-device';
-        document.body.className = 'mobile-view';
-    } else {
-        document.documentElement.className = 'desktop-device';
-        document.body.className = 'desktop-view';
+    function setViewBasedOnScreenSize() {
+        var isSmallScreen = window.innerWidth <= 992;
         
-        // Force desktop elements to show
-        showDesktopElements();
+        // Apply classes based on screen size
+        if (isSmallScreen) {
+            document.documentElement.className = 'mobile-device';
+            document.body.className = 'mobile-view';
+        } else {
+            document.documentElement.className = 'desktop-device';
+            document.body.className = 'desktop-view';
+            
+            // Force desktop elements to show
+            showDesktopElements();
+        }
     }
     
     // Function to show desktop elements
@@ -37,8 +38,10 @@
     
     // Function to fix layout after DOM is loaded
     function fixLayout() {
+        setViewBasedOnScreenSize();
+        
         // For desktop view, ensure the right elements are showing
-        if (!isMobileDevice) {
+        if (window.innerWidth > 992) {
             showDesktopElements();
             
             // Force the main content to be visible
@@ -54,6 +57,9 @@
         }
     }
     
+    // Initial setup
+    setViewBasedOnScreenSize();
+    
     // Apply fixes when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', fixLayout);
@@ -63,4 +69,7 @@
     
     // Also apply on load (for images and assets)
     window.addEventListener('load', fixLayout);
+    
+    // Update on resize
+    window.addEventListener('resize', setViewBasedOnScreenSize);
 })(); 
