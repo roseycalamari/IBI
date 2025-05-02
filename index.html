@@ -48,6 +48,51 @@
         </div>
     </header>
 
+    <!-- Mobile Slider Homepage (Only shown on mobile) -->
+    <div class="mobile-slider-container" id="mobileSlider">
+        <div class="mobile-slider-header">
+            <img src="images/logo white i.png" alt="Ingrid Bergman Interiors Logo">
+        </div>
+        
+        <div class="mobile-slider-body">
+            <div class="mobile-slides" id="mobileSlides">
+                <!-- Service Slide -->
+                <div class="mobile-slide" data-section="service">
+                    <div class="mobile-slide-background" style="background-image: url('images/the service (2).jpg');"></div>
+                    <div class="mobile-slide-content">
+                        <h2 class="mobile-slide-title" data-translate="service">The Service</h2>
+                        <button class="mobile-slide-btn" data-translate="explore">Explore</button>
+                    </div>
+                </div>
+                
+                <!-- Portrait Slide -->
+                <div class="mobile-slide mobile-portrait-slide" data-section="person">
+                    <div class="mobile-portrait-container">
+                        <img src="images/Ingrid Bergman Portret.jpg" alt="Portrait" class="mobile-portrait-image">
+                        <div class="mobile-portrait-overlay">
+                            <button class="mobile-slide-btn" data-translate="aboutButton">The Person</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Brands Slide -->
+                <div class="mobile-slide" data-section="brands">
+                    <div class="mobile-slide-background" style="background-image: url('images/the brands.jpg');"></div>
+                    <div class="mobile-slide-content">
+                        <h2 class="mobile-slide-title" data-translate="brands">The Brands</h2>
+                        <button class="mobile-slide-btn" data-translate="explore">Explore</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mobile-slider-indicators">
+                <div class="mobile-slider-dot active" data-slide="0"></div>
+                <div class="mobile-slider-dot" data-slide="1"></div>
+                <div class="mobile-slider-dot" data-slide="2"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content: 3-Panel Layout -->
     <main class="main-content">
         <!-- Left Panel: The Service -->
@@ -96,6 +141,7 @@
             <div class="close-icon"></div>
         </button>
         <div class="about-content">
+            <div class="mobile-back-btn" id="aboutBackBtn"></div>
             <div class="about-grid">
                 <div class="about-image">
                     <img src="images/Ingrid Bergman Portret.jpg" alt="Portrait">
@@ -124,6 +170,7 @@
             <div class="close-icon"></div>
         </button>
         <div class="service-content">
+            <div class="mobile-back-btn" id="serviceBackBtn"></div>
             <header class="service-header">
                 <h2 data-translate="serviceTitle">The Service</h2>
                 <p data-translate="serviceDescription">Ingrid Bergman Interiors is a comprehensive residential and commercial furniture agency, offering full-service solutions. We begin by understanding our clients' practical needs and style preferences, ensuring a personalized experience. Our distinctive showroom, located in the heart of the Algarve, serves as an inspirational space where visitors can envision the possibilities of outdoor and indoor living.</p>
@@ -257,6 +304,7 @@
             <div class="close-icon"></div>
         </button>
         <div class="brands-content">
+            <div class="mobile-back-btn" id="brandsBackBtn"></div>
             <header class="brands-header">
                 <h2 data-translate="brandsTitle">The Brands</h2>
                 <p class="brands-subtitle" data-translate="brandsSubtitle">We carry the most exclusive brands for any project for any client for any budget</p>

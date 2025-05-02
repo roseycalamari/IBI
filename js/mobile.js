@@ -3,6 +3,11 @@
  * Improves touch interactions, scrolling and navigation on mobile devices
  */
 
+// Immediate check to fix desktop view
+if (window.innerWidth > 1024) {
+    document.body.classList.remove('mobile-slider-active');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Check if device is mobile
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
@@ -26,9 +31,28 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
+ * Check if the current device is mobile
+ */
+function isMobileDevice() {
+    return window.innerWidth <= 1024;
+}
+
+/**
  * Initialize mobile-specific enhancements
  */
 function initMobileEnhancements() {
+    // Only apply mobile enhancements if it's actually a mobile device
+    if (!isMobileDevice()) {
+        document.body.classList.remove('mobile-slider-active');
+        return;
+    }
+
+    // Check for mobile slider
+    const mobileSlider = document.getElementById('mobileSlider');
+    if (mobileSlider) {
+        document.body.classList.add('mobile-slider-active');
+    }
+    
     // Fix portrait and section heights
     adjustHeights();
     
@@ -161,8 +185,16 @@ function enhanceNavigation() {
         btn.addEventListener('click', () => {
             // Add smooth exit animation
             document.body.classList.remove('no-scroll');
+            
+            // Show mobile slider if in mobile mode
+            if (window.innerWidth <= 1024) {
+                document.body.classList.add('mobile-slider-active');
+            }
         });
     });
+    
+    // Setup back buttons for mobile
+    setupMobileBackButtons();
     
     // Handle back button better on mobile
     window.addEventListener('popstate', () => {
@@ -170,8 +202,36 @@ function enhanceNavigation() {
         if (activeSections.length > 0) {
             activeSections.forEach(section => section.classList.remove('active'));
             document.body.classList.remove('no-scroll');
+            document.body.classList.add('mobile-slider-active');
             return false;
         }
+    });
+}
+
+/**
+ * Setup mobile back buttons
+ */
+function setupMobileBackButtons() {
+    // Get all back buttons
+    const backButtons = document.querySelectorAll('.mobile-back-btn');
+    
+    backButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Find the parent section
+            const parentSection = btn.closest('.section, .about-section');
+            
+            if (parentSection) {
+                // Remove active class
+                parentSection.classList.remove('active');
+                
+                // Remove no-scroll from body
+                document.body.classList.remove('no-scroll');
+                document.body.classList.remove('section-active');
+                
+                // Show mobile slider again
+                document.body.classList.add('mobile-slider-active');
+            }
+        });
     });
 }
 
@@ -305,6 +365,11 @@ window.mobileNavigation = {
         });
         document.body.classList.remove('section-active');
         document.body.classList.remove('no-scroll');
+        
+        // Show mobile slider in mobile mode
+        if (window.innerWidth <= 1024) {
+            document.body.classList.add('mobile-slider-active');
+        }
     },
     
     closeNav: function() {
@@ -316,5 +381,210 @@ window.mobileNavigation = {
         if (offCanvasOverlay) offCanvasOverlay.classList.remove('active');
         if (hamburgerButton) hamburgerButton.classList.remove('active');
         document.body.classList.remove('no-scroll');
+    },
+    
+    showMobileSlider: function() {
+        if (window.innerWidth <= 1024) {
+            document.body.classList.add('mobile-slider-active');
+        }
+    },
+    
+    hideMobileSlider: function() {
+        document.body.classList.remove('mobile-slider-active');
     }
-}; 
+};
+
+/**
+ * Mobile Slider Homepage Functionality
+ */
+(function() {
+    // Use function to check mobile status
+    let isMobile = isMobileDevice();
+    let currentSlide = 0;
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let slideWidth = 0;
+    let isAnimating = false;
+    
+    // Elements
+    const mobileSlider = document.getElementById('mobileSlider');
+    const slidesContainer = document.getElementById('mobileSlides');
+    const slides = document.querySelectorAll('.mobile-slide');
+    const indicators = document.querySelectorAll('.mobile-slider-dot');
+    const body = document.body;
+    
+    // Initialize mobile slider
+    function initMobileSlider() {
+        if (!mobileSlider || !isMobile) {
+            // Make sure body doesn't have mobile-slider-active class on desktop
+            body.classList.remove('mobile-slider-active');
+            return;
+        }
+        
+        // Show mobile slider
+        body.classList.add('mobile-slider-active');
+        
+        // Initialize slide width
+        slideWidth = mobileSlider.offsetWidth;
+        
+        // Setup touch/swipe events
+        setupTouchEvents();
+        
+        // Setup dot indicators
+        setupDotIndicators();
+        
+        // Setup slide buttons
+        setupSlideButtons();
+        
+        // Handle resize
+        window.addEventListener('resize', () => {
+            // Update mobile detection
+            isMobile = isMobileDevice();
+            slideWidth = mobileSlider ? mobileSlider.offsetWidth : 0;
+            
+            if (isMobile) {
+                body.classList.add('mobile-slider-active');
+                goToSlide(currentSlide);
+            } else {
+                body.classList.remove('mobile-slider-active');
+            }
+        });
+        
+        // Initial slide position
+        goToSlide(0);
+    }
+    
+    // Go to a specific slide
+    function goToSlide(index) {
+        if (isAnimating) return;
+        isAnimating = true;
+        
+        // Keep index within range
+        if (index < 0) index = slides.length - 1;
+        if (index >= slides.length) index = 0;
+        
+        currentSlide = index;
+        
+        // Move the slides
+        slidesContainer.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+        
+        // Update active indicators
+        indicators.forEach((dot, i) => {
+            if (i === currentSlide) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+        
+        // Update active slides
+        slides.forEach((slide, i) => {
+            if (i === currentSlide) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+        
+        // Allow animations again after transition completes
+        setTimeout(() => {
+            isAnimating = false;
+        }, 400);
+    }
+    
+    // Go to next slide
+    function nextSlide() {
+        goToSlide(currentSlide + 1);
+    }
+    
+    // Go to previous slide
+    function prevSlide() {
+        goToSlide(currentSlide - 1);
+    }
+    
+    // Setup touch events for swipe
+    function setupTouchEvents() {
+        slidesContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        slidesContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+    }
+    
+    // Handle swipe gesture
+    function handleSwipe() {
+        const swipeThreshold = 50; // minimum distance for swipe
+        const swipeDistance = touchEndX - touchStartX;
+        
+        if (swipeDistance > swipeThreshold) {
+            // Swipe right - go to previous slide
+            prevSlide();
+        } else if (swipeDistance < -swipeThreshold) {
+            // Swipe left - go to next slide
+            nextSlide();
+        }
+    }
+    
+    // Setup dot indicators
+    function setupDotIndicators() {
+        indicators.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                goToSlide(index);
+            });
+        });
+    }
+    
+    // Setup slide buttons
+    function setupSlideButtons() {
+        const buttons = document.querySelectorAll('.mobile-slide-btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const slide = button.closest('.mobile-slide');
+                const section = slide.getAttribute('data-section');
+                
+                // Activate the appropriate section
+                if (section === 'service') {
+                    activateSection(document.querySelector('.service-section'));
+                } else if (section === 'person') {
+                    activateSection(document.querySelector('.about-section'));
+                } else if (section === 'brands') {
+                    activateSection(document.querySelector('.brands-section'));
+                }
+                
+                // Add no-scroll to body
+                body.classList.add('no-scroll');
+            });
+        });
+    }
+    
+    // Helper function to activate sections
+    function activateSection(section) {
+        // Remove active class from all sections
+        document.querySelectorAll('.about-section, .service-section, .brands-section, .contact-section').forEach(s => {
+            s.classList.remove('active');
+        });
+        
+        // Add active class to the selected section
+        if (section) {
+            section.classList.add('active');
+            document.body.classList.add('section-active');
+        } else {
+            document.body.classList.remove('section-active');
+        }
+    }
+    
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        isMobile = isMobileDevice();
+        
+        if (isMobile) {
+            initMobileSlider();
+        } else {
+            // Force remove mobile-slider-active on desktop
+            body.classList.remove('mobile-slider-active');
+        }
+    });
+})(); 
