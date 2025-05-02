@@ -1364,6 +1364,75 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Execute initialization sequence
     initializeWebsite();
+
+    // Add error handling for contact-bg.jpg
+    const elementsWithContactBg = document.querySelectorAll('[style*="contact-bg.jpg"]');
+    
+    // Replace with fallback for any elements using contact-bg.jpg
+    elementsWithContactBg.forEach(element => {
+        const currentStyle = element.getAttribute('style');
+        if (currentStyle && currentStyle.includes('contact-bg.jpg')) {
+            // Replace with a solid color or another available image
+            const newStyle = currentStyle.replace(
+                /url\(['"]](.*?)contact-bg\.jpg['"]?\)/g, 
+                'url("images/the service (2).jpg")'
+            );
+            element.setAttribute('style', newStyle);
+        }
+    });
+
+    // Global image error handler
+    function setupGlobalImageErrorHandler() {
+        // Handle errors for all images that fail to load
+        document.querySelectorAll('img').forEach(img => {
+            if (!img.hasAttribute('data-error-handled')) {
+                img.setAttribute('data-error-handled', 'true');
+                
+                // Store original src
+                const originalSrc = img.src;
+                
+                // Add error handler
+                img.onerror = function() {
+                    console.log(`Image failed to load: ${originalSrc}`);
+                    
+                    // Use a generic fallback image based on context
+                    if (originalSrc.includes('portrait') || originalSrc.includes('Portret')) {
+                        this.src = 'images/logo white i.png';
+                    } else if (originalSrc.includes('project') || originalSrc.includes('gallery')) {
+                        this.src = 'images/logo black i.png';
+                    } else {
+                        this.src = 'images/logo white i.png';
+                    }
+                    
+                    // Add a placeholder class
+                    this.classList.add('img-fallback');
+                };
+                
+                // If image is already broken, trigger error handler
+                if (img.complete && (img.naturalWidth === 0 || img.naturalHeight === 0)) {
+                    img.onerror();
+                }
+            }
+        });
+        
+        // Handle background images with error
+        const styleElements = document.querySelectorAll('style');
+        styleElements.forEach(style => {
+            if (style.textContent.includes('contact-bg.jpg')) {
+                // Replace contact-bg.jpg references in stylesheets
+                style.textContent = style.textContent.replace(
+                    /url\(['"]?.*?contact-bg\.jpg['"]?\)/g,
+                    'url("images/logo white i.png")'
+                );
+            }
+        });
+    }
+
+    // Setup global image error handler
+    setupGlobalImageErrorHandler();
+    
+    // Re-run after a short delay to catch dynamically loaded images
+    setTimeout(setupGlobalImageErrorHandler, 1000);
 });
 
 /**
@@ -1449,18 +1518,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Close gallery popup
-    closeGallery.addEventListener('click', () => {
-        galleryPopup.classList.remove('active');
-        document.body.classList.remove('no-scroll');
-    });
-
-    // Close when clicking outside
-    galleryPopup.addEventListener('click', (e) => {
-        if (e.target === galleryPopup) {
+    if (closeGallery && galleryPopup) {
+        closeGallery.addEventListener('click', () => {
             galleryPopup.classList.remove('active');
             document.body.classList.remove('no-scroll');
-        }
-    });
+        });
+
+        // Close when clicking outside
+        galleryPopup.addEventListener('click', (e) => {
+            if (e.target === galleryPopup) {
+                galleryPopup.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            }
+        });
+    }
 
     // Update gallery image
     function updateGalleryImage() {
@@ -1479,20 +1550,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Previous image
-    prevBtn.addEventListener('click', () => {
-        if (currentImageIndex > 0) {
-            currentImageIndex--;
-            updateGalleryImage();
-        }
-    });
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                updateGalleryImage();
+            }
+        });
+    }
 
     // Next image
-    nextBtn.addEventListener('click', () => {
-        if (currentImageIndex < currentProjectImages.length - 1) {
-            currentImageIndex++;
-            updateGalleryImage();
-        }
-    });
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            if (currentImageIndex < currentProjectImages.length - 1) {
+                currentImageIndex++;
+                updateGalleryImage();
+            }
+        });
+    }
 
     // Thumbnail click
     galleryThumbnails.forEach((thumb, index) => {
@@ -1640,37 +1715,45 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Close project detail popup
-    closeProjectDetailBtn.addEventListener('click', function() {
-        projectDetailPopup.classList.remove('active');
-        document.body.classList.remove('no-scroll');
-    });
+    if (closeProjectDetailBtn) {
+        closeProjectDetailBtn.addEventListener('click', function() {
+            projectDetailPopup.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+        });
+    }
     
     // Previous button click
-    carouselPrevBtn.addEventListener('click', function() {
-        if (currentIndex > 0) {
-            updateCarouselImage(currentIndex - 1);
-        }
-    });
+    if (carouselPrevBtn) {
+        carouselPrevBtn.addEventListener('click', function() {
+            if (currentIndex > 0) {
+                updateCarouselImage(currentIndex - 1);
+            }
+        });
+    }
     
     // Next button click
-    carouselNextBtn.addEventListener('click', function() {
-        if (currentIndex < images.length - 1) {
-            updateCarouselImage(currentIndex + 1);
-        }
-    });
+    if (carouselNextBtn) {
+        carouselNextBtn.addEventListener('click', function() {
+            if (currentIndex < images.length - 1) {
+                updateCarouselImage(currentIndex + 1);
+            }
+        });
+    }
     
     // Handle swipe gestures on mobile
     let touchStartX = 0;
     let touchEndX = 0;
     
-    carouselMain.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-    
-    carouselMain.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    }, { passive: true });
+    if (carouselMain) {
+        carouselMain.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        carouselMain.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+    }
     
     function handleSwipe() {
         const swipeThreshold = 50; // minimum distance for swipe
@@ -1819,8 +1902,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 card.style.transform = 'scale(0.98)';
                 setTimeout(() => {
                     card.style.transform = '';
+                    // Check if project variable exists and has an id property
+                    const projectId = card.getAttribute('data-project') || 'default';
                     // Open project details popup
-                    openProjectDetail(project.id);
+                    if (typeof openProjectDetail === 'function') {
+                        openProjectDetail(projectId);
+                    } else {
+                        console.log("openProjectDetail function not available");
+                    }
                 }, 150);
             });
         });

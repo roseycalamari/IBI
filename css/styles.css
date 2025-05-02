@@ -181,6 +181,17 @@
     font-weight: 200;
     font-style: normal;
     font-display: swap;
+    /* Fallback if font file is missing */
+    unicode-range: U+0-10FFFF;
+}
+
+/* Fallback font for missing Abadi Extra Light */
+@font-face {
+    font-family: 'Abadi Extra Light Fallback';
+    src: local('Segoe UI Light'), local('Helvetica Neue Light'), local('Arial'), local(sans-serif);
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
 }
 
 html {
@@ -191,7 +202,7 @@ html {
 }
 
 body {
-    font-family: 'Abadi Extra Light', 'Arial', sans-serif;
+    font-family: 'Abadi Extra Light', 'Abadi Extra Light Fallback', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
     background-color: var(--color-background);
     color: var(--color-text);
     overflow-x: hidden;

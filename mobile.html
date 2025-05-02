@@ -42,7 +42,36 @@
             <img src="images/logo white i.png" alt="Ingrid Bergman Interiors Logo">
             <h1>Ingrid Bergman Interiors</h1>
         </div>
+        <div class="mobile-menu-icon" id="mobileMenuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+        <div class="mobile-menu-container">
+            <div class="mobile-menu-items">
+                <a href="javascript:void(0);" class="mobile-menu-item active" data-section="home" data-translate="home">Home</a>
+                <a href="javascript:void(0);" class="mobile-menu-item" data-section="person" data-translate="person">The Person</a>
+                <a href="javascript:void(0);" class="mobile-menu-item" data-section="service" data-translate="service">The Service</a>
+                <a href="javascript:void(0);" class="mobile-menu-item" data-section="brands" data-translate="brands">The Brands</a>
+                <a href="javascript:void(0);" class="mobile-menu-item" data-section="contact" data-translate="contact">Contact Us</a>
+            </div>
+            <div class="mobile-menu-social">
+                <a href="https://www.linkedin.com/in/ingridbergman/" class="mobile-menu-social-link" target="_blank" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://www.instagram.com/ingrid_bergman_collections/" class="mobile-menu-social-link" target="_blank" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="mailto:ingrid@ingridbergmaninteriors.com" class="mobile-menu-social-link" aria-label="Email">
+                    <i class="far fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </div>
 
     <!-- Vertical Slider Container -->
     <div class="vertical-slider-container">
@@ -193,14 +222,16 @@
                     <div class="mobile-gallery-preview">
                         <img src="images/CA project done/IBICali2019-30.jpg" alt="California Family Home Project Preview">
                     </div>
-                    <button type="button" class="mobile-gallery-btn" data-action="gallery">
-                        <span data-translate="viewGallery">View Gallery</span>
-                        <i class="fas fa-images"></i>
-                    </button>
-                    <button type="button" class="mobile-project-info-btn" data-action="project-info">
-                        <span data-translate="readAboutProject">Read About This Project</span>
-                        <i class="fas fa-book-open"></i>
-                    </button>
+                    <div class="mobile-button-group">
+                        <button type="button" class="mobile-gallery-btn" data-action="gallery">
+                            <span data-translate="viewGallery">View Gallery</span>
+                            <i class="fas fa-images"></i>
+                        </button>
+                        <button type="button" class="mobile-project-info-btn" data-action="project-info">
+                            <span data-translate="readAboutProject">Read About This Project</span>
+                            <i class="fas fa-book-open"></i>
+                        </button>
+                    </div>
                 </div>
             </section>
         </div>
@@ -240,7 +271,29 @@
                             <a href="https://www.cec-milano.it" target="_blank" class="mobile-brand-link" data-translate="visitWebsite">Visit Website</a>
                         </div>
                         
-                        <!-- Add more brand items as needed -->
+                        <div class="mobile-brand-item">
+                            <img src="images/cape umbrellas.jpg" alt="Cape Umbrellas" class="mobile-brand-image">
+                            <h3 class="mobile-brand-name">Cape Umbrellas</h3>
+                            <a href="https://www.capeumbrellas.com" target="_blank" class="mobile-brand-link" data-translate="visitWebsite">Visit Website</a>
+                        </div>
+                        
+                        <div class="mobile-brand-item">
+                            <img src="images/coco wolf1.jpg" alt="Coco Wolf" class="mobile-brand-image">
+                            <h3 class="mobile-brand-name">Coco Wolf</h3>
+                            <a href="https://www.cocowolf.co.uk" target="_blank" class="mobile-brand-link" data-translate="visitWebsite">Visit Website</a>
+                        </div>
+                        
+                        <div class="mobile-brand-item">
+                            <img src="images/Fjaka website picture.JPG" alt="Fjaka Furniture" class="mobile-brand-image">
+                            <h3 class="mobile-brand-name">Fjaka Furniture</h3>
+                            <a href="https://fjakafurniture.com" target="_blank" class="mobile-brand-link" data-translate="visitWebsite">Visit Website</a>
+                        </div>
+                        
+                        <div class="mobile-brand-item">
+                            <img src="images/todo bien.jpg" alt="Todo Bien" class="mobile-brand-image">
+                            <h3 class="mobile-brand-name">Todo Bien</h3>
+                            <a href="https://www.todobien.nl" target="_blank" class="mobile-brand-link" data-translate="visitWebsite">Visit Website</a>
+                        </div>
                     </div>
                 </div>
 
@@ -259,7 +312,17 @@
                             <a href="https://www.erickuster.com" target="_blank" class="mobile-brand-link" data-translate="visitWebsite">Visit Website</a>
                         </div>
                         
-                        <!-- Add more brand items as needed -->
+                        <div class="mobile-brand-item">
+                            <img src="images/pavoni.jpeg" alt="Pavoni Leathers" class="mobile-brand-image">
+                            <h3 class="mobile-brand-name">Pavoni Leathers</h3>
+                            <a href="https://www.pavonileathers.com" target="_blank" class="mobile-brand-link" data-translate="visitWebsite">Visit Website</a>
+                        </div>
+                        
+                        <div class="mobile-brand-item">
+                            <img src="images/shadesbyeric.webp" alt="Shades by Eric Kuster" class="mobile-brand-image">
+                            <h3 class="mobile-brand-name">Shades by Eric Kuster</h3>
+                            <a href="https://shadesbyerickuster.com" target="_blank" class="mobile-brand-link" data-translate="visitWebsite">Visit Website</a>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -273,12 +336,12 @@
             <div class="close-icon"></div>
         </button>
         <div class="mobile-section-content">
-            <header class="mobile-contact-header">
+            <header class="mobile-service-header">
                 <h2 data-translate="contactTitle">Contact Us</h2>
                 <p data-translate="contactDescription">Get in touch with our team to discuss how we can transform your space into a stunning, functional design that reflects your unique style and needs.</p>
             </header>
             
-            <section class="mobile-contact-form-container">
+            <div class="mobile-contact-form-container">
                 <form id="mobileContactForm" class="mobile-contact-form" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
                     <div class="mobile-form-group">
                         <label for="mobile-name" data-translate="name">Name</label>
@@ -328,14 +391,23 @@
                         </p>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
+    </div>
+
+    <!-- Gallery Modal (Will be created via JavaScript) -->
+    <div class="mobile-gallery-modal">
+        <!-- Content will be inserted dynamically -->
+    </div>
+
+    <!-- Project Description Modal (Will be created via JavaScript) -->
+    <div class="mobile-project-description-modal">
+        <!-- Content will be inserted dynamically -->
     </div>
 
     <!-- Scripts -->
     <script src="js/loader.js"></script>
-    <script src="js/mobile-specific.js"></script>
-    <script src="js/gallery.js"></script>
+    <script src="js/mobile.js"></script>
     <script src="js/translations.js"></script>
 </body>
 </html> 
