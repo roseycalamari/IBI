@@ -260,20 +260,6 @@ document.querySelectorAll('.off-canvas-menu-item, .contact-btn').forEach(item =>
 // Update close button handlers
 document.querySelectorAll('.close-about, .close-service, .close-brands, .close-contact').forEach(button => {
     button.addEventListener('click', function() {
-        // Stop video if it's playing
-        const video = document.getElementById('collections-video');
-        if (video) {
-            video.pause();
-            video.currentTime = 0;
-            const playButton = document.querySelector('.video-play-btn');
-            if (playButton) {
-                playButton.innerHTML = '<i class="fas fa-play"></i>';
-            }
-            const videoWrapper = document.querySelector('.luxury-video-wrapper');
-            if (videoWrapper) {
-                videoWrapper.classList.remove('video-playing');
-            }
-        }
         activateSection(null);
     });
 });
