@@ -6,6 +6,71 @@
     <title>Ingrid Bergman Interiors</title>
     <meta name="description" content="Premium interior design solutions. Transform your space with bespoke, elegant design.">
     
+    <!-- Device detection script - must be first -->
+    <script src="js/device-fix.js"></script>
+    
+    <!-- IMMEDIATE FIX FOR DESKTOP -->
+    <script>
+        (function forceDesktopView() {
+            // Only apply real mobile detection to actual mobile devices
+            var isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (!isMobileDevice) {
+                // Force desktop view - insert before any other styles load
+                var styleEl = document.createElement('style');
+                styleEl.id = 'force-desktop-view';
+                styleEl.innerHTML = `
+                    .main-content, .header { 
+                        display: block !important; 
+                    }
+                    .mobile-header, .mobile-footer, .vertical-slider-container, .mobile-menu-overlay { 
+                        display: none !important; 
+                    }
+                    body { 
+                        overflow: visible !important; 
+                    }
+                `;
+                document.head.appendChild(styleEl);
+                document.documentElement.className = 'desktop-device';
+            }
+        })();
+    </script>
+    
+    <!-- Early mobile detection script -->
+    <script>
+        (function() {
+            // Detect mobile devices ONLY, not just based on screen size
+            var isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            // Small screen size alone is not enough to consider as mobile
+            var isSmallScreen = window.innerWidth <= 992;
+            
+            // Only apply mobile styles if it's a true mobile device
+            if (isMobileDevice) {
+                document.documentElement.classList.add('mobile-device');
+                
+                // Add style tag for immediate styling before CSS loads
+                var style = document.createElement('style');
+                style.textContent = `
+                    @media (max-width: 992px) {
+                        .mobile-header, .mobile-footer, .vertical-slider-container { display: block !important; }
+                        .main-content, .header { display: none !important; }
+                        body { overflow-x: hidden; }
+                        .vertical-slider-container { 
+                            position: fixed; top: 60px; left: 0; right: 0; 
+                            height: calc(100vh - 120px); z-index: 50;
+                        }
+                        .vertical-slide:first-child { opacity: 1 !important; }
+                    }
+                `;
+                document.head.appendChild(style);
+            } else {
+                // Ensure desktop shows correctly by adding this class
+                document.documentElement.classList.add('desktop-device');
+            }
+        })();
+    </script>
+    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="images/logo white i.png">
     <link rel="apple-touch-icon" href="images/logo white i.png">
@@ -18,6 +83,9 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/gallery.css">
     <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Critical device overrides - must be last to take priority -->
+    <link rel="stylesheet" href="css/device-override.css">
     
     <!-- Font imports -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

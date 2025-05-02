@@ -4,6 +4,46 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Check if we're on a real mobile device, not just based on screen size
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // Force immediate application of responsive classes based on device type
+    handleResize();
+    
+    // Apply mobile view class immediately if on a true mobile device
+    if (isMobileDevice && window.innerWidth <= 992) {
+        document.body.classList.add('mobile-view');
+        document.body.classList.remove('desktop-view');
+        
+        // Force display of mobile elements only on real mobile devices
+        const mobileElements = document.querySelectorAll('.mobile-header, .mobile-footer, .vertical-slider-container');
+        mobileElements.forEach(el => {
+            el.style.display = 'block';
+        });
+        
+        // Force hide desktop elements only on real mobile devices
+        const desktopElements = document.querySelectorAll('.main-content, .header');
+        desktopElements.forEach(el => {
+            el.style.display = 'none';
+        });
+    } else {
+        // Make sure desktop view is applied to non-mobile devices
+        document.body.classList.add('desktop-view');
+        document.body.classList.remove('mobile-view');
+        
+        // Ensure desktop elements are visible on desktop
+        const desktopElements = document.querySelectorAll('.main-content, .header');
+        desktopElements.forEach(el => {
+            el.style.display = 'block';
+        });
+        
+        // Hide mobile elements on desktop
+        const mobileElements = document.querySelectorAll('.mobile-header, .mobile-footer, .vertical-slider-container');
+        mobileElements.forEach(el => {
+            el.style.display = 'none';
+        });
+    }
+    
     // Initialize responsive behavior
     initResponsive();
     
@@ -15,9 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
  * Initialize responsive behavior
  */
 function initResponsive() {
-    // Set initial state based on screen size
-    handleResize();
-    
     // Add special handling for mobile menu toggle
     const menuToggle = document.getElementById('mobileMenuToggle');
     const menuOverlay = document.getElementById('mobileMenuOverlay');
@@ -63,13 +100,37 @@ function handleResize() {
     // Get current viewport width
     const viewportWidth = window.innerWidth;
     
-    // Add/remove mobile class to body based on viewport width
-    if (viewportWidth <= 992) {
+    // Check for mobile device - use a more reliable test
+    const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // Only apply mobile view to actual mobile devices or very small screens
+    if ((viewportWidth <= 992 && isMobileDevice) || viewportWidth <= 576) {
         document.body.classList.add('mobile-view');
         document.body.classList.remove('desktop-view');
+        
+        // Only force mobile display on mobile devices
+        if (isMobileDevice) {
+            document.querySelectorAll('.mobile-header, .mobile-footer, .vertical-slider-container').forEach(el => {
+                el.style.display = 'block';
+            });
+            
+            document.querySelectorAll('.main-content, .header').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
     } else {
         document.body.classList.add('desktop-view');
         document.body.classList.remove('mobile-view');
+        
+        // Always show desktop elements on large screens
+        document.querySelectorAll('.main-content, .header').forEach(el => {
+            el.style.display = 'block';
+        });
+        
+        // Hide mobile elements on desktop
+        document.querySelectorAll('.mobile-header, .mobile-footer, .vertical-slider-container, .mobile-menu-overlay').forEach(el => {
+            el.style.display = 'none';
+        });
     }
 }
 

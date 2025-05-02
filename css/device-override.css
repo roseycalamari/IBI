@@ -1,0 +1,78 @@
+/**
+ * Critical device overrides for Ingrid Bergman Interiors
+ * IMPORTANT: This file contains !important rules to ensure correct display
+ */
+
+/* Desktop-specific overrides */
+html.desktop-device .main-content {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    height: 100vh !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+html.desktop-device .header {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+html.desktop-device .portrait-container {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 50 !important;
+}
+
+html.desktop-device .section-left,
+html.desktop-device .section-right {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Mobile elements must be hidden on desktop */
+html.desktop-device .mobile-header,
+html.desktop-device .mobile-footer,
+html.desktop-device .vertical-slider-container,
+html.desktop-device .mobile-menu-overlay {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    z-index: -1 !important;
+}
+
+/* Ensure proper display of the sections on desktop */
+html.desktop-device .section-left {
+    width: calc(50% - 15vw) !important;
+}
+
+html.desktop-device .section-right {
+    width: calc(50% - 15vw) !important;
+}
+
+/* Mobile-specific overrides (should not affect desktop) */
+@media screen and (max-width: 992px) {
+    html.mobile-device .mobile-header,
+    html.mobile-device .mobile-footer,
+    html.mobile-device .vertical-slider-container {
+        display: block !important;
+    }
+    
+    html.mobile-device .main-content,
+    html.mobile-device .header {
+        display: none !important;
+    }
+} 
