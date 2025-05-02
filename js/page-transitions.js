@@ -48,35 +48,35 @@ document.addEventListener('DOMContentLoaded', () => {
                           targetUrl.includes('brands') ? 'brands' :
                           targetUrl.includes('contact') ? 'contact' : 'home';
         
-        // Optimized transition values
+        // Optimized transition values - reduced durations for smoother experience
         let transitionType = 'slide';
-        let transitionDuration = 600; // Reduced from 900ms
-        let transitionEasing = 'cubic-bezier(0.4, 0, 0.2, 1)'; // More responsive easing
+        let transitionDuration = 400; // Further reduced from 600ms for better UX
+        let transitionEasing = 'cubic-bezier(0.215, 0.61, 0.355, 1)'; // More natural easing
         
         // Adjust transition type based on navigation pattern
         if (isHomepageReturn) {
             transitionType = 'fade';
-            transitionDuration = 500; // Reduced from 700ms
+            transitionDuration = 350; // Reduced from 500ms
         } else if (isBackNavigation) {
             transitionType = 'slideBack';
-            transitionDuration = 550; // Reduced from 850ms
+            transitionDuration = 400; // Reduced from 550ms
         } else if (currentPage.type === 'home' && targetType !== 'home') {
             transitionType = 'zoomOut';
-            transitionDuration = 650; // Reduced from 950ms
+            transitionDuration = 450; // Reduced from 650ms
         } else if (currentPage.type !== 'home' && targetType !== 'home') {
             transitionType = 'crossfade';
-            transitionDuration = 500; // Reduced from 800ms
+            transitionDuration = 350; // Reduced from 500ms
         }
         
         // Further reduce durations for touch devices
         if (isTouchDevice) {
-            transitionDuration = Math.floor(transitionDuration * 0.7); // More aggressive reduction
+            transitionDuration = Math.floor(transitionDuration * 0.7);
         }
         
         // Respect reduced motion preferences
         if (prefersReducedMotion) {
             transitionType = 'fade';
-            transitionDuration = 300; // Reduced from 400ms
+            transitionDuration = 250; // Reduced from 300ms
             transitionEasing = 'ease';
         }
         
@@ -143,32 +143,38 @@ document.addEventListener('DOMContentLoaded', () => {
             document.documentElement.style.setProperty('--page-transition-duration', `${transition.duration}ms`);
             document.documentElement.style.setProperty('--page-transition-easing', transition.easing);
             
-            // Use requestAnimationFrame for smoother transitions
+            // Force a reflow before adding transition classes for consistent animation
+            transitionOverlay.offsetWidth;
+            
+            // Use requestAnimationFrame for smoother transitions and add will-change for performance
             requestAnimationFrame(() => {
+                // Add hardware acceleration hints
+                transitionOverlay.style.willChange = 'transform, opacity';
+                
                 // Apply appropriate transition styles based on type
                 switch(transition.type) {
                     case 'fade':
                         transitionOverlay.style.opacity = '1';
-                        transitionOverlay.style.transform = 'translateY(0)';
+                        transitionOverlay.style.transform = 'translateY(0) translateZ(0)';
                         transitionOverlay.classList.add('fade-transition');
                         break;
                     case 'slideBack':
                         transitionOverlay.style.opacity = '1';
-                        transitionOverlay.style.transform = 'translateY(-100%)';
+                        transitionOverlay.style.transform = 'translateY(-100%) translateZ(0)';
                         break;
                     case 'zoomOut':
                         transitionOverlay.style.opacity = '1';
-                        transitionOverlay.style.transform = 'translateY(0) scale(1.05)';
+                        transitionOverlay.style.transform = 'translateY(0) scale(1.05) translateZ(0)';
                         transitionOverlay.classList.add('zoom-transition');
                         break;
                     case 'crossfade':
                         transitionOverlay.style.opacity = '1';
-                        transitionOverlay.style.transform = 'translateY(0)';
+                        transitionOverlay.style.transform = 'translateY(0) translateZ(0)';
                         transitionOverlay.classList.add('crossfade-transition');
                         break;
                     default:  // Default 'slide'
                         transitionOverlay.style.opacity = '1';
-                        transitionOverlay.style.transform = 'translateY(0)';
+                        transitionOverlay.style.transform = 'translateY(0) translateZ(0)';
                         break;
                 }
             });

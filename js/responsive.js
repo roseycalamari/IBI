@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.classList.remove('desktop-view');
         
         // Force display of mobile elements only on real mobile devices
-        const mobileElements = document.querySelectorAll('.mobile-header, .mobile-footer, .vertical-slider-container');
+        const mobileElements = document.querySelectorAll('.mobile-header, .mobile-static-container');
         mobileElements.forEach(el => {
             el.style.display = 'block';
         });
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Hide mobile elements on desktop
-        const mobileElements = document.querySelectorAll('.mobile-header, .mobile-footer, .vertical-slider-container');
+        const mobileElements = document.querySelectorAll('.mobile-header, .mobile-static-container, .vertical-slider-container');
         mobileElements.forEach(el => {
             el.style.display = 'none';
         });
@@ -55,35 +55,9 @@ document.addEventListener('DOMContentLoaded', function() {
  * Initialize responsive behavior
  */
 function initResponsive() {
-    // Add special handling for mobile menu toggle
-    const menuToggle = document.getElementById('mobileMenuToggle');
-    const menuOverlay = document.getElementById('mobileMenuOverlay');
-    
-    if (menuToggle && menuOverlay) {
-        menuToggle.addEventListener('click', function() {
-            menuOverlay.classList.toggle('active');
-            menuToggle.classList.toggle('active');
-        });
-        
-        // Close menu when clicking a menu item
-        const menuItems = document.querySelectorAll('.mobile-menu-item');
-        menuItems.forEach(item => {
-            item.addEventListener('click', function() {
-                menuOverlay.classList.remove('active');
-                menuToggle.classList.remove('active');
-                
-                // Handle section navigation
-                const section = this.getAttribute('data-section');
-                if (section && section !== 'home') {
-                    navigateToSection(section);
-                }
-            });
-        });
-    }
-    
-    // Handle vertical slider navigation
-    const slideButtons = document.querySelectorAll('.vertical-slide-btn');
-    slideButtons.forEach(button => {
+    // Handle static panel button clicks
+    const panelButtons = document.querySelectorAll('.mobile-panel-btn');
+    panelButtons.forEach(button => {
         button.addEventListener('click', function() {
             const section = this.getAttribute('data-section');
             if (section) {
@@ -110,11 +84,11 @@ function handleResize() {
         
         // Only force mobile display on mobile devices
         if (isMobileDevice) {
-            document.querySelectorAll('.mobile-header, .mobile-footer, .vertical-slider-container').forEach(el => {
+            document.querySelectorAll('.mobile-header, .mobile-static-container').forEach(el => {
                 el.style.display = 'block';
             });
             
-            document.querySelectorAll('.main-content, .header').forEach(el => {
+            document.querySelectorAll('.main-content, .header, .vertical-slider-container, .mobile-footer, .mobile-menu-overlay').forEach(el => {
                 el.style.display = 'none';
             });
         }
@@ -128,7 +102,7 @@ function handleResize() {
         });
         
         // Hide mobile elements on desktop
-        document.querySelectorAll('.mobile-header, .mobile-footer, .vertical-slider-container, .mobile-menu-overlay').forEach(el => {
+        document.querySelectorAll('.mobile-header, .mobile-static-container, .vertical-slider-container, .mobile-footer, .mobile-menu-overlay').forEach(el => {
             el.style.display = 'none';
         });
     }
@@ -139,10 +113,10 @@ function handleResize() {
  * @param {string} section - The section identifier
  */
 function navigateToSection(section) {
-    // Hide the vertical slider container
-    const sliderContainer = document.querySelector('.vertical-slider-container');
-    if (sliderContainer) {
-        sliderContainer.style.display = 'none';
+    // Hide the static mobile container
+    const staticContainer = document.querySelector('.mobile-static-container');
+    if (staticContainer) {
+        staticContainer.style.display = 'none';
     }
     
     // Show the appropriate section
@@ -164,19 +138,19 @@ function navigateToSection(section) {
         if (backBtn) {
             backBtn.addEventListener('click', function() {
                 targetSection.classList.remove('active');
-                if (sliderContainer) {
-                    sliderContainer.style.display = 'block';
+                if (staticContainer) {
+                    staticContainer.style.display = 'flex';
                 }
             });
         }
         
         // Handle the section close button
-        const closeBtn = targetSection.querySelector('.mobile-section-close, .close-service, .close-about');
+        const closeBtn = targetSection.querySelector('.mobile-section-close, .close-service, .close-about, .close-brands');
         if (closeBtn) {
             closeBtn.addEventListener('click', function() {
                 targetSection.classList.remove('active');
-                if (sliderContainer) {
-                    sliderContainer.style.display = 'block';
+                if (staticContainer) {
+                    staticContainer.style.display = 'flex';
                 }
             });
         }

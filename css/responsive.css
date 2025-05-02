@@ -43,21 +43,116 @@
     }
     
     /* Show mobile elements */
-    .mobile-header,
-    .mobile-footer,
-    .vertical-slider-container {
+    .mobile-header {
         display: block !important;
     }
     
-    /* Set up mobile container */
-    .vertical-slider-container {
+    /* VERTICAL STATIC HOMEPAGE - NEW IMPLEMENTATION */
+    .mobile-static-container {
+        display: flex !important;
+        flex-direction: column;
         position: fixed;
-        top: 60px;
+        top: 60px; /* Account for header height */
         left: 0;
         right: 0;
-        height: calc(100vh - 120px);
-        z-index: 50;
+        bottom: 0;
+        overflow-y: auto;
         width: 100%;
+        z-index: 50;
+        background-color: #f9f9f9;
+    }
+    
+    /* Each panel takes up 1/3 of the viewport height */
+    .mobile-panel {
+        position: relative;
+        width: 100%;
+        height: calc((100vh - 60px) / 3);
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    
+    .mobile-panel-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1;
+    }
+    
+    .mobile-panel-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding: 0 20px;
+    }
+    
+    .mobile-panel-title {
+        color: white;
+        font-size: 2rem;
+        margin-bottom: 15px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .mobile-panel-btn {
+        background-color: rgba(255,255,255,0.2);
+        color: white;
+        border: 1px solid white;
+        padding: 10px 20px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .mobile-panel-btn:hover {
+        background-color: rgba(255,255,255,0.3);
+    }
+    
+    /* Special styling for person panel */
+    .mobile-panel.person-panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .mobile-person-wrapper {
+        position: relative;
+        width: 80%;
+        max-width: 300px;
+        height: 80%;
+        margin: 0 auto;
+    }
+    
+    .mobile-person-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    
+    .mobile-person-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* HIDE ORIGINAL MOBILE UI COMPONENTS */
+    .vertical-slider-container,
+    .mobile-menu-overlay,
+    .mobile-footer {
+        display: none !important;
     }
     
     /* Mobile header styling */
@@ -69,7 +164,7 @@
         height: 60px;
         background-color: #1a1a1a;
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         padding: 0 15px;
         z-index: 100;
@@ -91,58 +186,9 @@
         font-weight: 300;
     }
     
-    /* Mobile menu button */
+    /* Hide mobile menu button */
     .mobile-menu-icon {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        width: 30px;
-        height: 20px;
-        cursor: pointer;
-    }
-    
-    .mobile-menu-icon span {
-        width: 100%;
-        height: 2px;
-        background-color: white;
-        transition: all 0.3s ease;
-    }
-    
-    /* Mobile menu icon animation */
-    .mobile-menu-icon span.active:nth-child(1) {
-        transform: translateY(9px) rotate(45deg);
-    }
-    
-    .mobile-menu-icon span.active:nth-child(2) {
-        opacity: 0;
-    }
-    
-    .mobile-menu-icon span.active:nth-child(3) {
-        transform: translateY(-9px) rotate(-45deg);
-    }
-    
-    /* Mobile footer */
-    .mobile-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 60px;
-        background-color: #1a1a1a;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 100;
-    }
-    
-    .mobile-footer-social {
-        display: flex;
-        gap: 20px;
-    }
-    
-    .mobile-footer-social a {
-        color: white;
-        font-size: 1.2rem;
+        display: none !important;
     }
     
     /* Adjust section content for better visibility on smaller screens */
@@ -155,204 +201,51 @@
     .about-section .about-text {
         width: 100%;
     }
-    
-    /* Style vertical slides */
-    .vertical-slides {
-        position: relative;
-        height: 100%;
-        width: 100%;
-    }
-    
-    .vertical-slide {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-    }
-    
-    .vertical-slide:first-child {
-        opacity: 1;
-    }
-    
-    .vertical-slide-background {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-size: cover;
-        background-position: center;
-    }
-    
-    .vertical-slide-content {
-        position: absolute;
-        bottom: 20%;
-        left: 0;
-        width: 100%;
-        text-align: center;
-        padding: 0 20px;
-        z-index: 2;
-    }
-    
-    .vertical-slide-title {
-        color: white;
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-    
-    .vertical-slide-btn {
-        background-color: rgba(255,255,255,0.2);
-        color: white;
-        border: 1px solid white;
-        padding: 10px 20px;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .vertical-slide-btn:hover {
-        background-color: rgba(255,255,255,0.3);
-    }
-    
-    /* Vertical slider indicators */
-    .vertical-slider-indicators {
-        position: absolute;
-        bottom: 20px;
-        left: 0;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-    }
-    
-    .vertical-slider-dot {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background-color: rgba(255,255,255,0.3);
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .vertical-slider-dot.active {
-        background-color: white;
-        transform: scale(1.2);
-    }
-    
-    /* Mobile menu overlay */
-    .mobile-menu-overlay {
-        position: fixed;
-        top: 60px;
-        left: 0;
-        width: 100%;
-        height: calc(100vh - 60px);
-        background-color: rgba(0,0,0,0.9);
-        z-index: 200;
-        display: none;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    
-    .mobile-menu-overlay.active {
-        display: block;
-        opacity: 1;
-    }
-    
-    .mobile-menu-container {
-        padding: 2rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-    }
-    
-    .mobile-menu-items {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-    
-    .mobile-menu-item {
-        color: white;
-        font-size: 1.5rem;
-        text-decoration: none;
-        transition: all 0.3s ease;
-    }
-    
-    .mobile-menu-item.active {
-        color: #f0f0f0;
-        transform: translateX(10px);
-    }
-    
-    .mobile-menu-social {
-        display: flex;
-        gap: 20px;
-        margin-top: 2rem;
-    }
-    
-    .mobile-menu-social-link {
-        color: white;
-        font-size: 1.2rem;
-    }
 }
 
-/* Mobile phones */
+/* Small screens (phones) */
 @media screen and (max-width: 576px) {
-    /* Further optimize for phones */
     .mobile-header .mobile-logo h1 {
         font-size: 1.2rem;
     }
     
-    .mobile-section-content {
-        padding: 1rem;
+    .mobile-panel-title {
+        font-size: 1.8rem;
     }
     
-    .vertical-slide-title {
-        font-size: 2rem;
-    }
-    
-    .vertical-slide-btn {
+    .mobile-panel-btn {
         padding: 8px 16px;
         font-size: 0.9rem;
     }
     
-    /* Stack service cards */
-    .mobile-service-card {
-        width: 100%;
-        margin: 0.5rem 0;
-    }
-    
-    /* Fix social media links at bottom */
-    .mobile-footer-social {
-        gap: 30px;
-    }
-    
-    .mobile-footer-social a {
-        font-size: 1.4rem;
+    .mobile-person-wrapper {
+        width: 70%;
     }
 }
 
-/* Handle orientation changes */
+/* Very small screens in landscape mode */
 @media screen and (max-height: 500px) and (orientation: landscape) {
-    .mobile-header {
-        height: 40px;
+    .mobile-panel {
+        height: calc(100vh - 60px);
     }
     
-    .vertical-slider-container {
-        height: calc(100vh - 80px);
-        top: 40px;
+    .mobile-static-container {
+        flex-direction: row;
+        flex-wrap: wrap;
     }
     
-    .mobile-footer {
-        height: 40px;
+    .mobile-panel {
+        width: 50%;
+        height: calc(100vh - 60px);
     }
     
-    /* Adjust vertical slides for landscape */
-    .vertical-slide-content {
-        padding: 1rem;
+    .mobile-panel.person-panel {
+        width: 100%;
+        height: calc((100vh - 60px) / 2);
+    }
+    
+    .mobile-person-wrapper {
+        width: 30%;
+        height: 90%;
     }
 } 

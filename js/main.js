@@ -504,82 +504,57 @@ document.addEventListener('DOMContentLoaded', () => {
      * Optimize image loading with lazy loading and progressive enhancement
      */
     const optimizeImageLoading = () => {
-        // All background images in sections
-        const bgElements = document.querySelectorAll('.section-background, .about-background, .service-background, .brands-background, .contact-background');
+        const allImages = document.querySelectorAll('img:not([loading])');
         
-        bgElements.forEach(bg => {
-            // Extract background image URL
-            const style = window.getComputedStyle(bg);
-            const bgImage = style.backgroundImage;
+        // Add loading attribute to all images that don't have it
+        allImages.forEach(img => {
+            // Skip tiny images that should load immediately
+            if (img.width < 50 || img.height < 50) return;
             
-            if (bgImage && bgImage !== 'none') {
-                // Extract URL
-                const url = bgImage.replace(/url\(['"]?([^'"]+)['"]?\)/gi, '$1');
+            // Use native lazy loading for better performance
+            img.setAttribute('loading', 'lazy');
+            
+            // Add decoding attribute to help browser optimize rendering
+            img.setAttribute('decoding', 'async');
+            
+            // Add error handling to prevent layout shifts from broken images
+            img.addEventListener('error', () => {
+                // Replace with a placeholder or add a class for styling
+                img.classList.add('image-load-error');
+            });
+            
+            // Prevent content jumps on load
+            if (!img.complete && !img.hasAttribute('width') && !img.hasAttribute('height')) {
+                // Apply a placeholder ratio if original dimensions unknown
+                const aspectRatio = img.hasAttribute('data-aspect-ratio') 
+                    ? img.getAttribute('data-aspect-ratio') 
+                    : '16 / 9';
                 
-                // Create image element to preload
-                const img = new Image();
+                // Set a default placeholder style until loaded
+                img.style.aspectRatio = aspectRatio;
                 
-                // Set load events
-                img.onload = () => {
-                    // Add a loaded class for CSS transitions
-                    bg.classList.add('bg-loaded');
-                };
-                
-                // Error handling for background images
-                img.onerror = () => {
-                    console.error(`Error loading background image: ${url}`);
-                    // Apply fallback background
-                    bg.style.backgroundColor = 'var(--color-secondary)';
-                };
-                
-                // Start loading with responsiveness in mind
-                // Use smaller images for mobile if available
-                if (viewportWidth <= 768 && url.includes('.')) {
-                    const fileExt = url.substring(url.lastIndexOf('.'));
-                    const fileBase = url.substring(0, url.lastIndexOf('.'));
-                    const mobileUrl = `${fileBase}-mobile${fileExt}`;
-                    
-                    // Try to load mobile version first
-                    const checkMobileImage = new Image();
-                    checkMobileImage.onload = () => {
-                        img.src = mobileUrl;
-                    };
-                    checkMobileImage.onerror = () => {
-                        img.src = url; // Fallback to original image
-                    };
-                    checkMobileImage.src = mobileUrl;
-                } else {
-                    img.src = url;
-                }
+                // Remove style after load
+                img.addEventListener('load', () => {
+                    img.style.aspectRatio = '';
+                });
             }
         });
         
-        // Add loading="lazy" to all images in the document
-        document.querySelectorAll('img:not([loading])').forEach(img => {
-            img.setAttribute('loading', 'lazy');
+        // Optimize background images for performance
+        const elementsWithBgImages = document.querySelectorAll('[style*="background-image"]');
+        elementsWithBgImages.forEach(el => {
+            // Add will-change for smoother animations if this element is animated
+            if (el.classList.contains('section-background') || 
+                el.classList.contains('vertical-slide-background') ||
+                el.classList.contains('about-background') ||
+                el.classList.contains('service-background') ||
+                el.classList.contains('brands-background')) {
+                el.style.willChange = 'transform, opacity';
+                
+                // Use transform for better performance
+                el.style.transform = 'translateZ(0)';
+            }
         });
-        
-        // Use IntersectionObserver for lazyloading if available
-        if ('IntersectionObserver' in window) {
-            const imageObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        const src = img.getAttribute('data-src');
-                        if (src) {
-                            img.src = src;
-                            img.removeAttribute('data-src');
-                            imageObserver.unobserve(img);
-                        }
-                    }
-                });
-            });
-            
-            // Find all images with data-src attribute
-            document.querySelectorAll('img[data-src]').forEach(img => {
-                imageObserver.observe(img);
-            });
-        }
     };
     
     /**
@@ -687,9 +662,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
         document.body.classList.add('transition-in-progress');
         
-        // Start by hiding other elements
+        // Prevent scrolling
+        document.body.classList.add('no-scroll');
+        
+        // Start by hiding other elements with hardware acceleration
         sections.forEach(section => {
             section.classList.add('section-transitioning');
+            // Add transform for better performance
+            section.style.transform = 'translateZ(0)';
         });
         
         // Handle different layouts for mobile vs desktop
@@ -700,14 +680,16 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // On desktop, fade out portrait with a slight delay before showing about section
             if (portraitContainer) {
+                // Use more efficient transform for better performance
+                portraitContainer.style.transform = 'translate(-50%, -50%) translateZ(0)';
                 portraitContainer.style.opacity = '0';
+                portraitContainer.style.transition = 'opacity 0.3s ease';
             }
         }
         
         // Show about section with optimized timing
-        setTimeout(() => {
+        requestAnimationFrame(() => {
             aboutSection.classList.add('active');
-            document.body.classList.add('no-scroll');
             
             // Remove transition flag after completion
             setTimeout(() => {
@@ -715,42 +697,50 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Update active menu item
                 updateActiveMenuItem();
-            }, 600);
-        }, 200);
+            }, 400); // Reduced from 600ms for better responsiveness
+        });
     };
     
     /**
      * Open the service section with optimized transitions
      */
     const openServiceSection = () => {
+        // Prevent multiple activations for stability
         if (!serviceSection || 
             serviceSection.classList.contains('transition-in-progress') || 
             document.body.classList.contains('transition-in-progress')) return;
         
         document.body.classList.add('transition-in-progress');
+        document.body.classList.add('no-scroll');
         
+        // Start by hiding other elements
         sections.forEach(section => {
             section.classList.add('section-transitioning');
+            // Add transform for better performance
+            section.style.transform = 'translateZ(0)';
         });
         
-        // Handle different layouts for mobile vs desktop
+        // Handle mobile vs desktop
         if (viewportWidth < 768) {
-            window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             if (portraitContainer) {
+                // Use more efficient transform for better performance
+                portraitContainer.style.transform = 'translate(-50%, -50%) translateZ(0)';
                 portraitContainer.style.opacity = '0';
+                portraitContainer.style.transition = 'opacity 0.3s ease';
             }
         }
         
-        setTimeout(() => {
+        // Show service section with optimized timing
+        requestAnimationFrame(() => {
             serviceSection.classList.add('active');
-            document.body.classList.add('no-scroll');
             
             setTimeout(() => {
                 document.body.classList.remove('transition-in-progress');
                 updateActiveMenuItem();
-            }, 600);
-        }, 200);
+            }, 400); // Reduced from 600ms for better responsiveness
+        });
     };
     
     /**
@@ -825,61 +815,69 @@ document.addEventListener('DOMContentLoaded', () => {
      * Close any expanded content and return to home with optimized transitions
      */
     const closeExpandedContent = () => {
+        // First check if any section is active
+        const activeSection = document.querySelector('.about-section.active, .service-section.active, .brands-section.active, .contact-section.active');
+        
+        if (!activeSection) return;
+        
         // Prevent multiple transitions
         if (document.body.classList.contains('transition-in-progress')) return;
         document.body.classList.add('transition-in-progress');
         
-        // Handle all expanded sections with consistent animations
-        const activeSections = document.querySelectorAll('.about-section.active, .service-section.active, .brands-section.active, .contact-section.active');
+        // Add exit animation class
+        activeSection.classList.add('section-exiting');
         
-        if (activeSections.length > 0) {
-            activeSections.forEach(section => {
-                const content = section.querySelector('.about-content, .service-content, .brands-content, .contact-content');
-                
-                // First fade out the content with nice easing
-                if (content) {
-                    content.style.opacity = '0';
-                    content.style.transform = 'translateY(1.875rem)'; // 30px to rem
-                }
-                
-                // Then fade out the background
-                setTimeout(() => {
-                    section.style.opacity = '0';
-                    
-                    // Finally remove active class once faded
-                    setTimeout(() => {
-                        section.classList.remove('active');
-                        section.style.opacity = ''; // Reset for next opening
-                        
-                        if (content) {
-                            content.style.opacity = '';
-                            content.style.transform = '';
-                        }
-                    }, 300);
-                }, 200);
-            });
-        }
-        
-        // Reset other elements
-        sections.forEach(section => {
-            section.classList.remove('section-transitioning');
-        });
-        
-        // Restore portrait with enhanced transitions
-        setTimeout(() => {
-            // Handle different layouts for mobile vs desktop
-            if (viewportWidth >= 768) {
-                if (portraitContainer) {
-                    portraitContainer.style.opacity = '1';
-                }
+        // Use requestAnimationFrame for smoother animation
+        requestAnimationFrame(() => {
+            // Mark the active section content for animation
+            const sectionContent = activeSection.querySelector('.about-content, .service-content, .brands-content, .contact-content');
+            if (sectionContent) {
+                sectionContent.style.transform = 'translate(-50%, -50%) translateY(20px) translateZ(0)';
+                sectionContent.style.opacity = '0';
+                sectionContent.style.transition = 'opacity 0.3s cubic-bezier(0.215, 0.61, 0.355, 1), transform 0.3s cubic-bezier(0.215, 0.61, 0.355, 1)';
             }
             
-            // Reset transition flag after completion
+            // Start section exit animation
             setTimeout(() => {
-                document.body.classList.remove('transition-in-progress');
-                updateActiveMenuItem();
-            }, 600);
-        }, 300);
+                // Remove active class from section
+                activeSection.classList.remove('active');
+                activeSection.classList.remove('section-exiting');
+                
+                // Bring back portrait with animation
+                if (portraitContainer && window.innerWidth >= 768) {
+                    portraitContainer.style.opacity = '1';
+                    portraitContainer.style.transition = 'opacity 0.4s ease';
+                }
+                
+                // Reset section styling
+                sections.forEach(section => {
+                    section.classList.remove('section-transitioning');
+                    // Clean up any added styles
+                    section.style.transform = '';
+                });
+                
+                // Allow scrolling again
+                document.body.classList.remove('no-scroll');
+                
+                // Clear transition flag
+                setTimeout(() => {
+                    document.body.classList.remove('transition-in-progress');
+                    
+                    // Update active menu item
+                    updateActiveMenuItem();
+                    
+                    // Clear any styles we added
+                    if (sectionContent) {
+                        // Reset after animation completes
+                        setTimeout(() => {
+                            sectionContent.style.transform = '';
+                            sectionContent.style.opacity = '';
+                            sectionContent.style.transition = '';
+                        }, 100);
+                    }
+                }, 300);
+            }, 300);
+        });
     };
     
     /**
@@ -1316,50 +1314,49 @@ document.addEventListener('DOMContentLoaded', () => {
      * Initialize components in performance-optimized sequence
      */
     const initializeWebsite = () => {
-        // Apply performance optimizations first
-        applyAdaptivePerformance();
+        // Initialize portrait first for the core layout
+        initPortrait();
         
-        // Set up layout management
+        // Apply performance optimizations
+        optimizeImageLoading();
+        setupScrollPrevention();
+        stopTransitionsOnResize();
+        
+        // Add scroll optimization
+        optimizeScrollPerformance();
+        
+        // Register event listeners for sections
+        registerSectionEvents();
+        
+        // Initialize UI elements
+        initializeContactForm();
+        setupSectionNavigation();
+        setupTouchInteractions();
+        setupIntersectionObserver();
+        
+        // Initialize project showcase
+        initializePortfolioAndTeam();
+        
+        // Apply adaptive performance settings based on device capability
+        detectDeviceCapability();
+        applyAdaptivePerformance();
         setupAdaptiveLayout();
         
-        // Critical path initialization - these must happen immediately
-        initPortrait();
-        setupScrollPrevention();
+        // Setup global error handlers for better stability
+        setupGlobalImageErrorHandler();
         
-        // Initialize content
-        initializePortfolioAndTeam();
-        initializeContactForm();
+        // Set up resize handling with debounce for better performance
+        window.addEventListener('resize', debounce(() => {
+            updateResponsiveLayout();
+        }, 100));
         
-        // Setup navigation
-        setupSectionNavigation();
+        // Mark initialization as complete
+        document.body.classList.add('init-complete');
         
-        // Apply initial responsive layout adjustments
-        updateResponsiveLayout();
-        
-        // Secondary initialization - slight delay for better initial load performance
+        // Adjust transition timing for smoother experience
         setTimeout(() => {
-            optimizeImageLoading();
-            setupTouchInteractions();
-            setupIntersectionObserver();
-            
-            // Only add parallax on non-touch devices and if not in reduced motion mode
-            if (!isTouchDevice && !prefersReducedMotion) {
-                setupParallaxEffects();
-            }
-            
-            // Set up utilities
-            stopTransitionsOnResize();
-            
-            // Update any responsive elements again after everything is loaded
-            setTimeout(() => {
-                updateResponsiveLayout();
-                
-                // Re-initialize portrait in case it didn't work the first time
-                initPortrait();
-                
-                document.body.classList.add('fully-initialized');
-            }, 1000);
-        }, 100);
+            document.documentElement.classList.add('transitions-enabled');
+        }, 300);
     };
     
     // Execute initialization sequence
@@ -2277,3 +2274,59 @@ if (projectInfoBtn && projectDescriptionModal && closeProjectDescriptionBtn) {
         }
     });
 }
+
+// Add a debounce function to prevent excessive function calls
+const debounce = (func, wait = 20, immediate = true) => {
+    let timeout;
+    return function() {
+        const context = this, args = arguments;
+        const later = function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        };
+        const callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+    };
+};
+
+// Add a function to reduce animation work during scroll
+const optimizeScrollPerformance = () => {
+    let rafId = null;
+    let ticking = false;
+    
+    // Use passive scroll listener for better performance
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            rafId = requestAnimationFrame(() => {
+                // Get elements that need to be updated on scroll
+                const elementsToAnimate = document.querySelectorAll('.parallax-element, .fade-in-on-scroll');
+                
+                // Only update visible elements
+                const viewportHeight = window.innerHeight;
+                const scrollTop = window.scrollY;
+                const threshold = 50; // px tolerance
+                
+                elementsToAnimate.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    // Only update if element is visible or about to be visible
+                    if (rect.top < viewportHeight + threshold && rect.bottom > -threshold) {
+                        // Apply animation/update logic here
+                        if (el.classList.contains('parallax-element')) {
+                            const parallaxAmount = (rect.top - viewportHeight) * 0.1;
+                            el.style.transform = `translateY(${parallaxAmount}px) translateZ(0)`;
+                        } else if (el.classList.contains('fade-in-on-scroll')) {
+                            // Determine opacity based on position
+                            const opacity = Math.min(1, Math.max(0, 1 - (rect.top / viewportHeight)));
+                            el.style.opacity = opacity;
+                        }
+                    }
+                });
+                
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+};

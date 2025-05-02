@@ -43,7 +43,8 @@
     .mobile-header,
     .mobile-footer,
     .vertical-slider-container,
-    .mobile-menu-overlay {
+    .mobile-menu-overlay,
+    .mobile-static-container {
         display: none !important;
         opacity: 0 !important;
         visibility: hidden !important;
@@ -68,23 +69,16 @@
 /* Mobile styles */
 @media screen and (max-width: 992px) {
     .mobile-header,
-    .mobile-footer,
-    .vertical-slider-container {
+    .mobile-static-container {
         display: block !important;
     }
     
     .main-content,
-    .header {
+    .header,
+    .mobile-footer,
+    .vertical-slider-container,
+    .mobile-menu-overlay {
         display: none !important;
-    }
-    
-    /* Fix duplicate social icon display */
-    .mobile-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        z-index: 100;
     }
     
     /* Ensure mobile menu works correctly */
@@ -92,20 +86,13 @@
         overflow: hidden;
     }
     
-    body.mobile-menu-open .mobile-menu-overlay {
-        display: block;
-        opacity: 1;
+    /* Make mobile static container display as flex to enable vertical layout */
+    .mobile-static-container {
+        display: flex !important;
     }
     
-    /* Fix the social media links at bottom */
-    .mobile-footer .mobile-footer-social {
-        display: flex;
-        justify-content: center;
-        gap: 30px;
-    }
-    
-    /* Fix the title display in slides */
-    .vertical-slide-title {
+    /* Fix the title display in mobile panels */
+    .mobile-panel-title {
         margin-bottom: 20px;
     }
 } 
