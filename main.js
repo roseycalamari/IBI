@@ -760,15 +760,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize everything when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize portfolio and team if on desktop
-    if (!window.location.href.includes('mobile.html')) {
-        initializePortfolioAndTeam();
-    }
-    
-    // Initialize mobile navigation if on mobile
-    if (window.location.href.includes('mobile.html') || document.querySelector('.mobile-nav')) {
-        initializeMobileNavigation();
-    }
+    // Initialize portfolio and team
+    initializePortfolioAndTeam();
 });
 
 // Gallery and project modals functionality
