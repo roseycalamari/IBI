@@ -118,19 +118,80 @@ document.addEventListener('DOMContentLoaded', () => {
         if (offCanvasNav) {
             let touchStartY = 0;
             let touchEndY = 0;
+            let touchStartX = 0;
+            let touchEndX = 0;
             
             offCanvasNav.addEventListener('touchstart', (e) => {
                 touchStartY = e.changedTouches[0].screenY;
+                touchStartX = e.changedTouches[0].screenX;
             }, { passive: true });
             
             offCanvasNav.addEventListener('touchend', (e) => {
                 touchEndY = e.changedTouches[0].screenY;
+                touchEndX = e.changedTouches[0].screenX;
                 
-                // Detect swipe down
-                if (touchEndY - touchStartY > 100 && offCanvasNav.scrollTop <= 0) {
+                // Detect swipe down or right
+                if ((touchEndY - touchStartY > 70 && offCanvasNav.scrollTop <= 0) || 
+                    (touchEndX - touchStartX > 100)) {
                     closeNavigation();
                 }
             }, { passive: true });
+            
+            // Improve scrolling within the navigation menu on mobile
+            const menuContainer = offCanvasNav.querySelector('.off-canvas-content');
+            if (menuContainer) {
+                menuContainer.addEventListener('touchmove', (e) => {
+                    e.stopPropagation(); // Prevent parent element scrolling issues
+                }, { passive: true });
+            }
+            
+            // Better handling of menu item clicks on mobile
+            const menuItems = offCanvasNav.querySelectorAll('.off-canvas-menu-item');
+            menuItems.forEach(item => {
+                item.addEventListener('touchend', (e) => {
+                    // Add active state feedback
+                    item.classList.add('touch-active');
+                    setTimeout(() => {
+                        item.classList.remove('touch-active');
+                    }, 300);
+                }, { passive: true });
+            });
+            
+            // Improve back button handling
+            window.addEventListener('popstate', () => {
+                if (offCanvasNav.classList.contains('active')) {
+                    closeNavigation();
+                    history.pushState(null, '', window.location.pathname);
+                    return false;
+                }
+            });
+        }
+        
+        // Detect if device is mobile for specialized handling
+        const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobileDevice) {
+            document.body.classList.add('is-mobile-device');
+            
+            // Improve scroll performance
+            document.addEventListener('touchmove', (e) => {
+                if (document.body.classList.contains('no-scroll')) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            // Ensure consistent active states for touch targets
+            const touchTargets = document.querySelectorAll('button, .section-title, .expand-btn, .social-link');
+            touchTargets.forEach(target => {
+                target.addEventListener('touchstart', () => {
+                    target.classList.add('touch-active');
+                }, { passive: true });
+                
+                target.addEventListener('touchend', () => {
+                    setTimeout(() => {
+                        target.classList.remove('touch-active');
+                    }, 300);
+                }, { passive: true });
+            });
         }
     };
     
