@@ -2340,13 +2340,9 @@ body.loaded .logo-placeholder {
 .brands-section.active ~ .header,
 .contact-section.active ~ .header,
 body.section-active .header {
-    display: none !important;
-    visibility: hidden !important;
+    /* Display none was causing the issue - changing to opacity only */
     opacity: 0 !important;
     pointer-events: none !important;
-    z-index: -9999 !important;
-    position: absolute !important;
-    transform: translateY(-100%) !important;
 }
 
 /* Ensure sections are above everything when active */
@@ -2510,7 +2506,9 @@ body.section-active .header {
 
 /* Hide logo when sections are active */
 body.section-active .header .logo-container {
-    display: none;
+    /* Changed from display:none to opacity */
+    opacity: 0;
+    pointer-events: none;
 }
 
 .brands-header {
