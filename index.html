@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/gallery.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/mobile.css">
     
     <!-- Critical device overrides - must be last to take priority -->
     <link rel="stylesheet" href="css/device-override.css">
@@ -29,6 +30,15 @@
     
     <!-- Icon library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Mobile viewport meta tag -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Mobile CSS -->
+<link rel="stylesheet" href="css/mobile.css">
+
+<!-- Mobile Detection - Load First -->
+<script src="js/mobile-init.js"></script>
 </head>
 <body>
     <!-- Page Loader -->
@@ -625,6 +635,7 @@
     </nav>
 
     <!-- Scripts -->
+    <script src="js/mobile-init.js"></script>
     <script src="js/loader.js"></script>
     <script src="js/main.js"></script>
     <script src="js/navigation.js"></script>
@@ -632,6 +643,7 @@
     <script src="js/page-transitions.js"></script>
     <script src="js/translations.js"></script>
     <script src="js/responsive.js"></script>
+    <script src="js/mobile-navigation.js"></script>
     <!-- Mobile Menu Script -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -674,5 +686,77 @@
             }
         });
     </script>
+    <!-- Mobile Layout Container - Only visible on mobile devices -->
+<div class="mobile-layout-container">
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <div class="mobile-logo">
+            <img src="images/logo white i.png" alt="Ingrid Bergman Interiors Logo">
+        </div>
+        <button class="mobile-menu-toggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+    
+    <!-- Mobile Vertical Slider -->
+    <div class="mobile-slider-container">
+        <div class="mobile-slides">
+            <!-- Service Slide -->
+            <div class="mobile-slide" data-section="service">
+                <div class="slide-background" style="background-image: url('images/the service (2).jpg');"></div>
+                <div class="slide-content">
+                    <h2 data-translate="service">The Service</h2>
+                    <button class="mobile-explore-btn" data-action="open-service">Explore</button>
+                </div>
+            </div>
+            
+            <!-- Portrait Slide -->
+            <div class="mobile-slide portrait-slide" data-section="person">
+                <div class="mobile-portrait-container">
+                    <img src="images/Ingrid Bergman Portret.jpg" alt="Portrait" class="mobile-portrait">
+                    <button class="mobile-about-btn" data-action="open-about">The Person</button>
+                </div>
+            </div>
+            
+            <!-- Brands Slide -->
+            <div class="mobile-slide" data-section="brands">
+                <div class="slide-background" style="background-image: url('images/the brands.jpg');"></div>
+                <div class="slide-content">
+                    <h2 data-translate="brands">The Brands</h2>
+                    <button class="mobile-explore-btn" data-action="open-brands">Explore</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Slide Indicators -->
+        <div class="mobile-slide-indicators">
+            <span class="indicator active" data-slide="0"></span>
+            <span class="indicator" data-slide="1"></span>
+            <span class="indicator" data-slide="2"></span>
+        </div>
+    </div>
+    
+    <!-- Mobile Footer -->
+    <footer class="mobile-footer">
+        <button class="mobile-contact-btn" data-translate="contactButton">Contact Us</button>
+        <div class="mobile-language-switcher">
+            <button class="mobile-lang-btn active" data-lang="en">En</button>
+            <span class="lang-separator">|</span>
+            <button class="mobile-lang-btn" data-lang="pt">Pt</button>
+        </div>
+    </footer>
+</div>
+<!-- Core Scripts -->
+<script src="js/loader.js"></script>
+<script src="js/main.js"></script>
+<script src="js/navigation.js"></script>
+<script src="js/gallery.js"></script>
+<script src="js/page-transitions.js"></script>
+<script src="js/translations.js"></script>
+
+<!-- Mobile Scripts - Load After Core -->
+<script src="js/mobile-navigation.js"></script>
 </body>
 </html>
