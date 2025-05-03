@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ingrid Bergman Interiors</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/logo white i.png">
+    <link rel="apple-touch-icon" href="images/logo white i.png">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Mobile Detection and Redirection -->
+    <script>
+    (function() {
+        // Redirect to desktop if not on mobile
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isSmallScreen = window.innerWidth <= 768;
+        
+        if (!isMobile && !isSmallScreen) {
+            window.location.href = 'index.html';
+        }
+    })();
+    </script>
+    
+    <style>
+    /* Reset and Base Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    :root {
+        --color-primary: #a19c90;
+        --color-secondary: #635e53;
+        --color-tertiary: #d1cabc;
+        --color-background: #fdfdfd;
+        --color-text: #333333;
+        --header-height: 60px;
+        --footer-height: 60px;
+        --transition: all 0.3s ease;
+    }
+    
+    body {
+        font-family: 'Abadi Extra Light', Arial, sans-serif;
+        background: var(--color-background);
+        color: var(--color-text);
+        height: 100vh;
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+    }
+    
+    /* Logo Menu Button - Floating */
+    .logo-menu-btn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 1001;
+        border: none;
+        transition: var(--transition);
+    }
+    
+    .logo-menu-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.05);
+    }
+    
+    .logo-menu-btn img {
+        width: 25px;
+        height: 25px;
+        object-fit: contain;
+    }
+    
+    .logo-menu-btn.active {
+        background: rgba(255, 255, 255, 0.3);
+    }
+    
+    /* Mobile Navigation */
+    .mobile-nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: var(--color-secondary);
+        transition: right 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+        z-index: 999;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .mobile-nav.active {
+        right: 0;
+    }
+    
+    .nav-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition: var(--transition);
+        z-index: 998;
+    }
+    
+    .nav-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .mobile-nav-content {
+        padding: 80px 30px 30px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .mobile-nav-items {
+        list-style: none;
+        flex: 1;
+    }
+    
+    .mobile-nav-items li {
+        margin-bottom: 25px;
+    }
+    
+    .mobile-nav-items a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.5rem;
+        display: block;
+        transition: var(--transition);
+        position: relative;
+        padding-left: 10px;
+    }
+    
+    .mobile-nav-items a::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 2px;
+        height: 0;
+        background: var(--color-tertiary);
+        transition: height 0.3s ease;
+    }
+    
+    .mobile-nav-items a.active::before,
+    .mobile-nav-items a:hover::before {
+        height: 100%;
+    }
+    
+    .mobile-nav-items a.active,
+    .mobile-nav-items a:hover {
+        color: var(--color-tertiary);
+        transform: translateX(10px);
+    }
+    
+    .mobile-nav-footer {
+        padding-top: 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .mobile-social {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+    }
+    
+    .mobile-social a {
+        color: #fff;
+        font-size: 1.2rem;
+        transition: var(--transition);
+    }
+    
+    .mobile-social a:hover {
+        color: var(--color-tertiary);
+        transform: translateY(-3px);
+    }
+    
+    /* Mobile Main Content */
+    .mobile-main {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+    }
+    
+    .mobile-slider {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .mobile-panel {
+        height: 33.33vh;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+    
+    .panel-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        transform: scale(1.1);
+        transition: transform 0.8s ease;
+        filter: brightness(0.7);
+    }
+    
+    .mobile-panel.active .panel-background {
+        transform: scale(1);
+    }
+    
+    .panel-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%);
+    }
+    
+    .panel-content {
+        position: absolute;
+        bottom: 15%;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 0 20px;
+        z-index: 2;
+    }
+    
+    .panel-content h2 {
+        color: #fff;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .explore-btn {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid #fff;
+        color: #fff;
+        padding: 8px 25px;
+        border-radius: 30px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: var(--transition);
+        backdrop-filter: blur(5px);
+    }
+    
+    .explore-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+    
+    /* Portrait Panel Specific */
+    .portrait-wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60%;
+        max-width: 200px;
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .portrait-image {
+        width: 100%;
+        height: auto;
+        max-height: 65%;
+        object-fit: contain;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .portrait-overlay {
+        position: absolute;
+        bottom: 10%;
+        left: 0;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .portrait-overlay h2 {
+        color: #fff;
+        font-size: 1.6rem;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .portrait-overlay .explore-btn {
+        padding: 8px 25px;
+        font-size: 0.9rem;
+    }
+    
+    /* Panel Indicators - Removed as panels are all visible now */
+    
+    .indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .indicator.active {
+        background: #fff;
+        transform: scale(1.3);
+    }
+    
+    /* Mobile Footer */
+    .mobile-footer {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 100;
+    }
+    
+    .contact-btn {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .contact-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+    
+    .footer-social {
+        display: flex;
+        gap: 20px;
+    }
+    
+    .footer-social a {
+        color: #fff;
+        font-size: 1.2rem;
+        transition: var(--transition);
+    }
+    
+    .footer-social a:hover {
+        transform: translateY(-3px);
+        color: var(--color-tertiary);
+    }
+    
+    .language-switcher {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .lang-btn {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 0.9rem;
+        opacity: 0.7;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    
+    .lang-btn.active {
+        opacity: 1;
+        color: var(--color-tertiary);
+    }
+    
+    /* Content Overlays */
+    .mobile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: var(--color-secondary);
+        transform: translateY(100%);
+        transition: transform 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+        z-index: 2000;
+        overflow-y: auto;
+    }
+    
+    .mobile-overlay.active {
+        transform: translateY(0);
+    }
+    
+    .overlay-content {
+        padding: 20px;
+        min-height: 100vh;
+    }
+    
+    .overlay-close {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 50%;
+        color: #fff;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        z-index: 2001;
+    }
+    
+    .overlay-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: rotate(90deg);
+    }
+    
+    .overlay-body {
+        padding-top: 60px;
+        color: #fff;
+    }
+    
+    .overlay-body h2 {
+        font-size: 2rem;
+        margin-bottom: 30px;
+        color: var(--color-tertiary);
+    }
+    
+    .overlay-body p {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        color: rgba(255, 255, 255, 0.9);
+    }
+    
+    /* Service Content */
+    .service-grid {
+        display: grid;
+        gap: 20px;
+        margin-top: 30px;
+    }
+    
+    .service-card {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+    }
+    
+    .service-card h3 {
+        color: var(--color-tertiary);
+        margin-bottom: 10px;
+    }
+    
+    /* Brands Content */
+    .brands-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin-top: 30px;
+    }
+    
+    .brand-item {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    
+    .brand-item img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+    
+    .brand-item h4 {
+        color: var(--color-tertiary);
+        margin-bottom: 8px;
+    }
+    
+    .brand-link {
+        color: #fff;
+        font-size: 0.9rem;
+        text-decoration: none;
+        opacity: 0.8;
+    }
+    
+    /* Contact Form */
+    .contact-form {
+        margin-top: 30px;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        color: var(--color-tertiary);
+        margin-bottom: 8px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 1rem;
+    }
+    
+    .form-group textarea {
+        height: 120px;
+        resize: vertical;
+    }
+    
+    .submit-btn {
+        background: var(--color-primary);
+        color: #fff;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-size: 1rem;
+        cursor: pointer;
+        width: 100%;
+        transition: var(--transition);
+    }
+    
+    .submit-btn:hover {
+        background: var(--color-secondary);
+        transform: translateY(-2px);
+    }
+    </style>
+</head>
+<body>
+    <!-- Logo Menu Button -->
+    <button class="logo-menu-btn" id="logoMenuBtn">
+        <img src="images/logo white i.png" alt="Ingrid Bergman Interiors">
+    </button>
+
+    <!-- Navigation Overlay -->
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-content">
+            <ul class="mobile-nav-items">
+                <li><a href="#" data-section="home" class="active">Home</a></li>
+                <li><a href="#" data-section="person">The Person</a></li>
+                <li><a href="#" data-section="service">The Service</a></li>
+                <li><a href="#" data-section="brands">The Brands</a></li>
+                <li><a href="#" data-section="contact">Contact</a></li>
+            </ul>
+            <div class="mobile-nav-footer">
+                <div class="mobile-social">
+                    <a href="https://www.linkedin.com/in/ingridbergman/" target="_blank">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://www.instagram.com/ingrid_bergman_collections/" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="mailto:ingrid@ingridbergmaninteriors.com">
+                        <i class="far fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Main Content -->
+    <main class="mobile-main">
+        <div class="mobile-slider" id="mobileSlider">
+            <!-- Service Panel -->
+            <div class="mobile-panel" data-panel="service">
+                <div class="panel-background" style="background-image: url('images/the service (2).jpg');"></div>
+                <div class="panel-overlay"></div>
+                <div class="panel-content">
+                    <h2>The Service</h2>
+                    <button class="explore-btn" data-open="service">Explore</button>
+                </div>
+            </div>
+
+            <!-- Portrait Panel -->
+            <div class="mobile-panel active" data-panel="person">
+                <div class="portrait-wrapper">
+                    <img src="images/Ingrid Bergman Portret.jpg" alt="Ingrid Bergman" class="portrait-image">
+                    <div class="portrait-overlay">
+                        <h2>The Person</h2>
+                        <button class="explore-btn" data-open="person">Meet Ingrid</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Brands Panel -->
+            <div class="mobile-panel" data-panel="brands">
+                <div class="panel-background" style="background-image: url('images/the brands.jpg');"></div>
+                <div class="panel-overlay"></div>
+                <div class="panel-content">
+                    <h2>The Brands</h2>
+                    <button class="explore-btn" data-open="brands">Explore</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel indicators removed - all panels visible -->
+
+    </main>
+
+    <!-- Mobile Footer -->
+    <footer class="mobile-footer">
+        <button class="contact-btn" data-open="contact">Contact Us</button>
+        
+        <div class="footer-social">
+            <a href="https://www.linkedin.com/in/ingridbergman/" target="_blank">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://www.instagram.com/ingrid_bergman_collections/" target="_blank">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="mailto:ingrid@ingridbergmaninteriors.com">
+                <i class="far fa-envelope"></i>
+            </a>
+        </div>
+        
+        <div class="language-switcher">
+            <button class="lang-btn active" data-lang="en">En</button>
+            <span style="color: #fff;">|</span>
+            <button class="lang-btn" data-lang="pt">Pt</button>
+        </div>
+    </footer>
+
+    <!-- Person Overlay -->
+    <div class="mobile-overlay" id="personOverlay">
+        <button class="overlay-close"><i class="fas fa-times"></i></button>
+        <div class="overlay-content">
+            <div class="overlay-body">
+                <h2>The Person</h2>
+                <div class="person-content">
+                    <img src="images/Ingrid Bergman Portret.jpg" alt="Ingrid Bergman" style="width: 100%; border-radius: 10px; margin-bottom: 20px;">
+                    <p>Ingrid Bergman embarked on her interior design journey in 2013 after spending two decades in the high-end fashion industry. Her time at a renowned interior design firm in Dubai provided her with invaluable experience, allowing her to master the nuances of the trade.</p>
+                    <p>Ingrid's extensive background in retail has proven to be a tremendous asset for her clients. This experience has sharpened her impeccable taste in colors and fabrics and honed her ability to source the most exclusive furniture for her agency.</p>
+                    <p>One of Ingrid's most remarkable qualities is her ability to genuinely listen to her clients, ensuring she delivers the beautiful results they envision. She believes this skill is crucial in building strong client relationships, which lead to inspired, creative design solutions and ultimate client satisfaction.</p>
+                    <p>Ingrid's work is global, with a diverse portfolio of projects. Her home in Portugal, complete with a breathtaking garden, has been transformed into an exclusive showroom where guests can experience the essence of luxury living.</p>
+                    <p>Clients are invited to visit the Villa in the Algarve to explore her collections and discuss their projects in this unique and inspiring setting.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Overlay -->
+    <div class="mobile-overlay" id="serviceOverlay">
+        <button class="overlay-close"><i class="fas fa-times"></i></button>
+        <div class="overlay-content">
+            <div class="overlay-body">
+                <h2>The Service</h2>
+                <p>Ingrid Bergman Interiors is a comprehensive residential and commercial furniture agency, offering full-service solutions. We begin by understanding our clients' practical needs and style preferences, ensuring a personalized experience.</p>
+                
+                <div class="service-grid">
+                    <div class="service-card">
+                        <h3>Concept & Design</h3>
+                        <p>To make a concept and design (with mood & material boards)</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Space Planning</h3>
+                        <p>To plan your space (floorplans and 3D renders)</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Furniture Sourcing</h3>
+                        <p>To source furniture</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Window Treatment</h3>
+                        <p>To find the right window treatment</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Lighting Planning</h3>
+                        <p>To plan your lighting</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>Accessories & Carpets</h3>
+                        <p>To source carpets & home accessories</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Brands Overlay -->
+    <div class="mobile-overlay" id="brandsOverlay">
+        <button class="overlay-close"><i class="fas fa-times"></i></button>
+        <div class="overlay-content">
+            <div class="overlay-body">
+                <h2>The Brands</h2>
+                <p>We carry the most exclusive brands for any project for any client for any budget</p>
+                
+                <h3 style="margin-top: 30px; margin-bottom: 20px;">Outdoor Collections</h3>
+                <div class="brands-grid">
+                    <div class="brand-item">
+                        <img src="images/Borek picture for website.jpg" alt="Borek">
+                        <h4>Borek</h4>
+                        <a href="https://www.borek.eu" target="_blank" class="brand-link">Visit Website</a>
+                    </div>
+                    <div class="brand-item">
+                        <img src="images/bryck.jpg" alt="BRYCK">
+                        <h4>BRYCK</h4>
+                        <a href="https://www.bryck.nl" target="_blank" class="brand-link">Visit Website</a>
+                    </div>
+                    <div class="brand-item">
+                        <img src="images/C&C Milano picture for website.jpg" alt="C&C Milano">
+                        <h4>C&C Milano</h4>
+                        <a href="https://www.cec-milano.it" target="_blank" class="brand-link">Visit Website</a>
+                    </div>
+                    <div class="brand-item">
+                        <img src="images/cape umbrellas.jpg" alt="Cape Umbrellas">
+                        <h4>Cape Umbrellas</h4>
+                        <a href="https://www.capeumbrellas.com" target="_blank" class="brand-link">Visit Website</a>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 30px; margin-bottom: 20px;">Indoor Collections</h3>
+                <div class="brands-grid">
+                    <div class="brand-item">
+                        <img src="images/Hamilton Conte for website.jpg" alt="Hamilton Conte">
+                        <h4>Hamilton Conte</h4>
+                        <a href="https://hamiltonconte.com" target="_blank" class="brand-link">Visit Website</a>
+                    </div>
+                    <div class="brand-item">
+                        <img src="images/kuster.jpg" alt="Eric Kuster">
+                        <h4>Eric Kuster</h4>
+                        <a href="https://www.erickuster.com" target="_blank" class="brand-link">Visit Website</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Overlay -->
+    <div class="mobile-overlay" id="contactOverlay">
+        <button class="overlay-close"><i class="fas fa-times"></i></button>
+        <div class="overlay-content">
+            <div class="overlay-body">
+                <h2>Contact Us</h2>
+                <p>Get in touch with our team to discuss how we can transform your space into a stunning, functional design that reflects your unique style and needs.</p>
+                
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone (optional)</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+                
+                <div style="margin-top: 40px;">
+                    <h3 style="color: var(--color-tertiary); margin-bottom: 15px;">Our Office</h3>
+                    <p>Ingrid Bergman Interiors<br>
+                    Rua Fernão Lopes 279<br>
+                    Albufeira, Portugal</p>
+                    
+                    <h3 style="color: var(--color-tertiary); margin: 25px 0 15px;">Contact Information</h3>
+                    <p>Email: ingrid@ingridbergmaninteriors.com<br>
+                    Portugal: +351 963 486 962<br>
+                    Netherlands: +31 6 401 80 249</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Mobile App JavaScript
+    class MobileApp {
+        constructor() {
+            this.init();
+        }
+        
+        init() {
+            this.setupElements();
+            this.setupEventListeners();
+        }
+        
+        setupElements() {
+            this.logoBtn = document.getElementById('logoMenuBtn');
+            this.mobileNav = document.getElementById('mobileNav');
+            this.navOverlay = document.getElementById('navOverlay');
+            this.slider = document.getElementById('mobileSlider');
+            this.panels = document.querySelectorAll('.mobile-panel');
+            this.navItems = document.querySelectorAll('.mobile-nav-items a');
+            this.langBtns = document.querySelectorAll('.lang-btn');
+        }
+        
+        setupEventListeners() {
+            // Menu toggle
+            this.logoBtn.addEventListener('click', () => this.toggleMenu());
+            this.navOverlay.addEventListener('click', () => this.toggleMenu());
+            
+            // Navigation items
+            this.navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const section = item.dataset.section;
+                    this.handleNavigation(section);
+                });
+            });
+            
+            // Explore buttons
+            document.querySelectorAll('[data-open]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const overlay = btn.dataset.open;
+                    this.openOverlay(overlay);
+                });
+            });
+            
+            // Overlay close buttons
+            document.querySelectorAll('.overlay-close').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const overlay = btn.closest('.mobile-overlay');
+                    this.closeOverlay(overlay);
+                });
+            });
+            
+            // Language switcher
+            this.langBtns.forEach(btn => {
+                btn.addEventListener('click', () => this.switchLanguage(btn));
+            });
+            
+            // Contact form
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', (e) => this.handleFormSubmit(e));
+            }
+        }
+        
+        toggleMenu() {
+            const isActive = this.mobileNav.classList.contains('active');
+            
+            this.mobileNav.classList.toggle('active');
+            this.navOverlay.classList.toggle('active');
+            this.logoBtn.classList.toggle('active');
+            
+            // Prevent body scroll when menu is open
+            document.body.style.overflow = isActive ? '' : 'hidden';
+        }
+        
+        handleNavigation(section) {
+            // Close menu
+            this.toggleMenu();
+            
+            // Update active nav item
+            this.navItems.forEach(item => {
+                item.classList.toggle('active', item.dataset.section === section);
+            });
+            
+            // Handle navigation - open overlays for all sections
+            switch(section) {
+                case 'home':
+                    // Do nothing, already on home
+                    break;
+                case 'service':
+                    this.openOverlay('service');
+                    break;
+                case 'brands':
+                    this.openOverlay('brands');
+                    break;
+                case 'person':
+                    this.openOverlay('person');
+                    break;
+                case 'contact':
+                    this.openOverlay('contact');
+                    break;
+            }
+        }
+        
+        // Removed panel navigation functions as all panels are visible
+        
+        openOverlay(overlayId) {
+            const overlay = document.getElementById(`${overlayId}Overlay`);
+            if (overlay) {
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        closeOverlay(overlay) {
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        switchLanguage(btn) {
+            this.langBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Add language switching logic here
+            const lang = btn.dataset.lang;
+            console.log(`Switching to language: ${lang}`);
+        }
+        
+        handleFormSubmit(e) {
+            e.preventDefault();
+            // Add form submission logic here
+            console.log('Form submitted');
+            alert('Thank you for your message. We will be in touch shortly.');
+            e.target.reset();
+        }
+    }
+    
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        new MobileApp();
+    });
+    </script>
+</body>
+</html>
